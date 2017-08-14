@@ -10,10 +10,10 @@ class Armour(context: Application) {
     val application = context
     val applicationContext = context.applicationContext
     val armourClassLoader = ArmourClassLoader(application.classLoader)
+    var classLoaderInterceptor: ArmourClassLoaderInterceptor? = null
 
     init {
         println("init armour")
-
         ArmourHacker.instance.hackClassLoader(context, armourClassLoader)
     }
 
@@ -37,5 +37,4 @@ class Armour(context: Application) {
     }
 
     fun getPlugin(name: String) = map[name]
-
 }

@@ -27,20 +27,16 @@ class Navigator {
         getModule(module)?.registerComponent(component, realComponent, componentType)
     }
 
-
     fun registerComponentHandler(componentType: String, handler: NavigatorComponentHandler)
             = ComponentHandlerCenter.instance.registerComponentHandler(componentType, handler)
 
-    fun registerInterceptor(interceptor: NavigatorInterceptor) {}
+    fun registerInterceptor(interceptor: NavigatorInterceptor) {
 
-    fun nav(module: String, component: String, jsonArg: String) {
-        println("${module} | ${component} | ${jsonArg}")
-        val cmp = modules[module]?.getComponent(component) ?: return
-        println("wowowo")
-        val type = cmp.type
-        println("wowowo")
-        ComponentHandlerCenter.instance.getComponentHandler(type)?.onHandle(cmp, jsonArg)
     }
 
-
+    fun nav(module: String, component: String, jsonArg: String) {
+        val cmp = modules[module]?.getComponent(component) ?: return
+        val type = cmp.type
+        ComponentHandlerCenter.instance.getComponentHandler(type)?.onHandle(cmp, jsonArg)
+    }
 }

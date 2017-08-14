@@ -1,4 +1,4 @@
-package com.yangzhiwen.compass.ext
+package com.yangzhiwen.navigator.ext.navigator
 
 import android.content.ComponentName
 import android.content.Intent

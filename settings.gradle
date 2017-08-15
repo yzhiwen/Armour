@@ -1,1 +1,1 @@
-include ':app', ':compass', ':armour'
+include ':app', ':compass', ':armour', ':plugin'

@@ -5,8 +5,6 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import android.widget.LinearLayout
-import com.yangzhiwen.armour.APlugin
 import com.yangzhiwen.compass.Navigator
 
 class MainActivity : AppCompatActivity() {
@@ -14,6 +12,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        App.res = resources
 
         //  todo
 //        val layout = LinearLayout(this)
@@ -37,7 +36,8 @@ class MainActivity : AppCompatActivity() {
             sendBroadcast(Intent("user_center_msg"))
         }
 
+        findViewById<Button>(R.id.local_service).setOnClickListener {
+            Navigator.instance.nav("user_center", "user_service", "user_service arg xixi")
+        }
     }
 }
-
-

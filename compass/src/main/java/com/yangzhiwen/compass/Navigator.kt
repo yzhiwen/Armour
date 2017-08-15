@@ -10,12 +10,15 @@ class Navigator {
 
     var context: Context? = null
     val modules = mutableMapOf<String, NavigatorModule>()
+    val readComponentToModule = mutableMapOf<String, String>()
 
     companion object {
         val instance = Navigator()
     }
 
     fun getModule(module: String): NavigatorModule? = modules[module]
+
+    fun getModuleByReadComponent(realComponent: String): String? = readComponentToModule[realComponent]
 
     fun registerModule(module: String): NavigatorModule? {
         if (getModule(module) == null) modules.put(module, NavigatorModule(module))
@@ -25,6 +28,7 @@ class Navigator {
     fun registerComponent(module: String, component: String, componentType: String, realComponent: String) {
         if (getModule(module) == null) registerModule(module)
         getModule(module)?.registerComponent(component, realComponent, componentType)
+        readComponentToModule[realComponent] = module
     }
 
     fun registerComponentHandler(componentType: String, handler: NavigatorComponentHandler)

@@ -31,6 +31,12 @@ class Navigator {
         readComponentToModule[realComponent] = module
     }
 
+    fun registerComponent(component: NavigatorComponent) {
+//        if (getModule(module) == null) registerModule(module)
+//        getModule(module)?.registerComponent(component, realComponent, componentType)
+//        readComponentToModule[realComponent] = module
+    }
+
     fun registerComponentHandler(componentType: String, handler: NavigatorComponentHandler)
             = ComponentHandlerCenter.instance.registerComponentHandler(componentType, handler)
 
@@ -38,9 +44,9 @@ class Navigator {
 
     }
 
-    fun nav(module: String, component: String, jsonArg: String) {
+    fun nav(module: String, component: String, operation: String, jsonArg: String) {
         val cmp = modules[module]?.getComponent(component) ?: return
         val type = cmp.type
-        ComponentHandlerCenter.instance.getComponentHandler(type)?.onHandle(cmp, jsonArg)
+        ComponentHandlerCenter.instance.getComponentHandler(type)?.onHandle(cmp, operation, jsonArg)
     }
 }

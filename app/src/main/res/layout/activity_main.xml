@@ -51,10 +51,21 @@
 
 
     <Button
-        android:id="@+id/local_service"
+        android:id="@+id/start_local_service"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="start local service"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/stop_local_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="stop local service"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

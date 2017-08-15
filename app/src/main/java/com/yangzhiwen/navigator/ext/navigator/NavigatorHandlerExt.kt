@@ -2,7 +2,6 @@ package com.yangzhiwen.navigator.ext.navigator
 
 import android.content.ComponentName
 import android.content.Intent
-import android.os.Bundle
 import com.yangzhiwen.armour.ArmourService
 import com.yangzhiwen.compass.ComponentType
 import com.yangzhiwen.compass.Navigator
@@ -19,7 +18,7 @@ class ActivityComponentHandler : NavigatorComponentHandler(ComponentType.instanc
         val instance = ActivityComponentHandler()
     }
 
-    override fun onHandle(component: NavigatorComponent, jsonArg: String) {
+    override fun onHandle(component: NavigatorComponent, operation: String, jsonArg: String) {
         println("On Activity Handle() :: " + component.component + " arg : " + jsonArg)
 
         // component 是否是插件
@@ -48,8 +47,8 @@ class ServiceComponentHandler : NavigatorComponentHandler(ComponentType.instance
         val instance = ServiceComponentHandler()
     }
 
-    override fun onHandle(component: NavigatorComponent, jsonArg: String) {
-        println("On Service Handle() :: $component arg : $jsonArg")
+    override fun onHandle(component: NavigatorComponent, operation: String, jsonArg: String) {
+        println("On Service Handle() :: $component arg :: $operation :: $jsonArg")
 
         // component 是否是插件
         // 启动本地用于代理Component的Service
@@ -58,11 +57,9 @@ class ServiceComponentHandler : NavigatorComponentHandler(ComponentType.instance
             val intent = Intent(context, ArmourService::class.java)
 //            intent.component = ComponentName("com.yangzhiwen.armour", "com.yangzhiwen.armour.ArmourService") // 不知道为什么启动不了
 
-            println("$intent")
-            println("${intent.component}")
-            println("${intent.extras}")
+            intent.putExtra(ArmourService.COMPONENT, component.realComponent)
+            intent.putExtra(ArmourService.ARG_OP, operation)
 
-            intent.putExtra("RealComponent", component.realComponent)
             context.startService(intent)
             return
         }
@@ -71,7 +68,6 @@ class ServiceComponentHandler : NavigatorComponentHandler(ComponentType.instance
         intent.component = ComponentName("com.yangzhiwen.navigator", component.realComponent)
         Navigator.instance.context?.startService(intent)
     }
-
 }
 
 fun Navigator.registerActivityComponentHandler() {

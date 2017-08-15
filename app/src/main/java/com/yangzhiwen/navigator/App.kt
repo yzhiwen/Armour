@@ -28,14 +28,15 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        println("是非颠倒多多多多多多多多")
 
         registerActivityLifecycleCallbacks(ActivityLifecycleListener.instance)
 
-        Navigator.instance.registerActivityComponent("host", "pay", "com.yangzhiwen.navigator.MainActivity")
-        Navigator.instance.registerActivityComponent("host", "other", "com.yangzhiwen.navigator.OtherActivity")
-        Navigator.instance.registerActivityComponent("user_center", "setting", "com.yangzhiwen.demo.MainActivity")
-        Navigator.instance.registerActivityComponent("user_center", "center", "com.yangzhiwen.demo.CenterActivity")
-        Navigator.instance.registerServiceComponent("user_center","user_service","com.yangzhiwen.demo.UserCenterService")
+        Navigator.instance.registerActivityComponent(false, "host", "pay", "com.yangzhiwen.navigator.MainActivity")
+        Navigator.instance.registerActivityComponent(false, "host", "other", "com.yangzhiwen.navigator.OtherActivity")
+        Navigator.instance.registerActivityComponent(true, "user_center", "setting", "com.yangzhiwen.demo.MainActivity")
+        Navigator.instance.registerActivityComponent(true, "user_center", "center", "com.yangzhiwen.demo.CenterActivity")
+        Navigator.instance.registerServiceComponent("user_center", "user_service", "com.yangzhiwen.demo.UserCenterService")
         Navigator.instance.registerActivityComponentHandler()
         Navigator.instance.registerServiceComponentHandler()
 
@@ -53,7 +54,6 @@ class App : Application() {
             path = outPath
 
             val plugin = Armour.instance(this).instantPlugin("user_center", outPath)
-
 
 
             val actions = arrayOf("user_center_msg", "user_center_setting_msg")

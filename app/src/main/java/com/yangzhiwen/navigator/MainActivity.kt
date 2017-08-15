@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import com.yangzhiwen.compass.Navigator
+import com.yangzhiwen.navigator.ext.navigator.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,23 +22,27 @@ class MainActivity : AppCompatActivity() {
 
         Navigator.instance.context = this
         findViewById<Button>(R.id.btn).setOnClickListener {
-            Navigator.instance.nav("host", "other", "aaa")
+            Navigator.instance.startActivity("host", "other", "aaa")
         }
 
         findViewById<Button>(R.id.user).setOnClickListener {
-            Navigator.instance.nav("user_center", "center", "arg")
+            Navigator.instance.startActivity("user_center", "center", "arg")
         }
 
         findViewById<Button>(R.id.user2).setOnClickListener {
-            Navigator.instance.nav("user_center", "center", "arg2")
+            Navigator.instance.startActivity("user_center", "center", "arg2")
         }
 
         findViewById<Button>(R.id.send).setOnClickListener {
-            sendBroadcast(Intent("user_center_msg"))
+            Navigator.instance.sendBroadcast(Intent("user_center_msg"))
         }
 
-        findViewById<Button>(R.id.local_service).setOnClickListener {
-            Navigator.instance.nav("user_center", "user_service", "user_service arg xixi")
+        findViewById<Button>(R.id.start_local_service).setOnClickListener {
+            Navigator.instance.startService("user_center", "user_service", "user_service arg xixi")
+        }
+
+        findViewById<Button>(R.id.stop_local_service).setOnClickListener {
+            Navigator.instance.stopService("user_center", "user_service", "user_service arg xixi")
         }
     }
 }

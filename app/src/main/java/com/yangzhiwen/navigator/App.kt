@@ -39,7 +39,7 @@ class App : Application() {
         Navigator.instance.registerActivityComponent(false, "host", "other", "com.yangzhiwen.navigator.OtherActivity")
         Navigator.instance.registerActivityComponent(true, "user_center", "setting", "com.yangzhiwen.demo.MainActivity")
         Navigator.instance.registerActivityComponent(true, "user_center", "center", "com.yangzhiwen.demo.CenterActivity")
-        Navigator.instance.registerServiceComponent("user_center", "user_service", "com.yangzhiwen.demo.UserCenterService")
+        Navigator.instance.registerServiceComponent(true, "user_center", "user_service", "com.yangzhiwen.demo.UserCenterService")
         Navigator.instance.registerActivityComponentHandler()
         Navigator.instance.registerServiceComponentHandler()
 
@@ -55,7 +55,7 @@ class App : Application() {
 
 
             val actions = arrayOf("user_center_msg", "user_center_setting_msg")
-            Navigator.instance.registerReceiverComponent(this, "user_center", "user_center_receiver", "com.yangzhiwen.demo.UserCenterReceiver", *actions)
+            Navigator.instance.registerReceiverComponent(true, "user_center", "user_center_receiver", "com.yangzhiwen.demo.UserCenterReceiver", *actions)
 
             // 加载路由的信息
             val recevier = Armour.instance()?.getPlugin("user_center")?.classloader?.loadClass("com.yangzhiwen.demo.UserCenterReceiver")?.newInstance() as BroadcastReceiver

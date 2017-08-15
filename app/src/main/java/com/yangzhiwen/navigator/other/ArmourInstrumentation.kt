@@ -1,4 +1,4 @@
-package com.yangzhiwen.navigator
+package com.yangzhiwen.navigator.other
 
 import android.app.Activity
 import android.app.Instrumentation
@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.view.ContextThemeWrapper
 import com.yangzhiwen.armour.Armour
+import com.yangzhiwen.navigator.App
 
 /**
  * Created by yangzhiwen on 17/8/15.

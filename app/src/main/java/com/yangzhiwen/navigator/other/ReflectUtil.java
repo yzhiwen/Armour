@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.yangzhiwen.navigator;
+package com.yangzhiwen.navigator.other;
 
 import android.app.Instrumentation;
 import android.content.Context;

@@ -4,10 +4,13 @@ import android.app.Application
 import android.content.BroadcastReceiver
 import android.content.IntentFilter
 import android.content.res.Resources
+import com.yangzhiwen.armour.ActivityLifecycleListener
 import com.yangzhiwen.armour.Armour
 import com.yangzhiwen.compass.Navigator
 import com.yangzhiwen.navigator.ext.armour.ArmourClassLoaderInterceptorImpl
 import com.yangzhiwen.navigator.ext.navigator.*
+import com.yangzhiwen.navigator.other.ArmourInstrumentation
+import com.yangzhiwen.navigator.other.ReflectUtil
 import kotlin.concurrent.thread
 import java.io.File
 import java.io.FileInputStream
@@ -28,10 +31,10 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        println("是非颠倒多多多多多多多多")
 
         registerActivityLifecycleCallbacks(ActivityLifecycleListener.instance)
 
+        // todo 自动化 & 动态化
         Navigator.instance.registerActivityComponent(false, "host", "pay", "com.yangzhiwen.navigator.MainActivity")
         Navigator.instance.registerActivityComponent(false, "host", "other", "com.yangzhiwen.navigator.OtherActivity")
         Navigator.instance.registerActivityComponent(true, "user_center", "setting", "com.yangzhiwen.demo.MainActivity")
@@ -40,14 +43,9 @@ class App : Application() {
         Navigator.instance.registerActivityComponentHandler()
         Navigator.instance.registerServiceComponentHandler()
 
-
         Armour.instance(this)
         Armour.instance(this).classLoaderInterceptor = ArmourClassLoaderInterceptorImpl()
 
-
-        // 插件 组件  关联 宿主 组件
-        Armour.instance(this).classLoaderInterceptor?.classMapToModule?.put("com.yangzhiwen.navigator.ProxyActivity", "user_center")
-        Armour.instance(this).classLoaderInterceptor?.realClassMap?.put("com.yangzhiwen.navigator.ProxyActivity", "com.yangzhiwen.demo.CenterActivity")
 
         thread {
             val outPath = copy()
@@ -59,7 +57,6 @@ class App : Application() {
             val actions = arrayOf("user_center_msg", "user_center_setting_msg")
             Navigator.instance.registerReceiverComponent(this, "user_center", "user_center_receiver", "com.yangzhiwen.demo.UserCenterReceiver", *actions)
 
-//            plugin?.classloader?.loadClass("com.yangzhiwen.demo.UserCenterReceiver")
             // 加载路由的信息
             val recevier = Armour.instance()?.getPlugin("user_center")?.classloader?.loadClass("com.yangzhiwen.demo.UserCenterReceiver")?.newInstance() as BroadcastReceiver
             val filter = IntentFilter()

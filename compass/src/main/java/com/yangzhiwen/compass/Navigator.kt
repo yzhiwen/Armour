@@ -10,31 +10,30 @@ class Navigator {
 
     var context: Context? = null
     val modules = mutableMapOf<String, NavigatorModule>()
-    val readComponentToModule = mutableMapOf<String, String>()
+    val realComponentToModule = mutableMapOf<String, String>()
 
     companion object {
         val instance = Navigator()
     }
 
+    fun getModuleByRealComponent(realComponent: String): String? = realComponentToModule[realComponent]
+
     fun getModule(module: String): NavigatorModule? = modules[module]
 
-    fun getModuleByReadComponent(realComponent: String): String? = readComponentToModule[realComponent]
+    fun registerModule(module: String): NavigatorModule? = modules.put(module, NavigatorModule(module))
 
-    fun registerModule(module: String): NavigatorModule? {
-        if (getModule(module) == null) modules.put(module, NavigatorModule(module))
-        return getModule(module)
-    }
+    fun getModuleWithRegister(module: String): NavigatorModule = getModule(module) ?: registerModule(module)!! // !! 这里不应该发生Exception
 
-    fun registerComponent(module: String, component: String, componentType: String, realComponent: String) {
-        if (getModule(module) == null) registerModule(module)
-        getModule(module)?.registerComponent(component, realComponent, componentType)
-        readComponentToModule[realComponent] = module
-    }
+    // module -> component list | no
+    // component -> module | yes
+    // realComponent -> component | no
 
+    /**
+     * 这样是考虑到扩展性 Component可以进行扩展，在相应Handler进行转换 & handle
+     */
     fun registerComponent(component: NavigatorComponent) {
-//        if (getModule(module) == null) registerModule(module)
-//        getModule(module)?.registerComponent(component, realComponent, componentType)
-//        readComponentToModule[realComponent] = module
+        getModuleWithRegister(component.module).registerComponent(component)
+        realComponentToModule[component.realComponent] = component.module
     }
 
     fun registerComponentHandler(componentType: String, handler: NavigatorComponentHandler)
@@ -44,8 +43,8 @@ class Navigator {
 
     }
 
-    fun nav(module: String, component: String, operation: String, jsonArg: String) {
-        val cmp = modules[module]?.getComponent(component) ?: return
+    fun nav(module: String, name: String, operation: String, jsonArg: String) {
+        val cmp = modules[module]?.getComponent(name) ?: return
         val type = cmp.type
         ComponentHandlerCenter.instance.getComponentHandler(type)?.onHandle(cmp, operation, jsonArg)
     }

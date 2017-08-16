@@ -1,4 +1,4 @@
-package com.yangzhiwen.compass
+package com.yangzhiwen.armour.compass
 
 /**
  * Component Handler : 路由Activity Handler、路由网络请求 Handler

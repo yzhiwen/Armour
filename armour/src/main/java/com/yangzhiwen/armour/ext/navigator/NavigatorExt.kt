@@ -1,10 +1,10 @@
-package com.yangzhiwen.navigator.ext.navigator
+package com.yangzhiwen.armour.ext.navigator
 
 import android.content.Intent
 import com.yangzhiwen.armour.ArmourService
-import com.yangzhiwen.compass.ComponentType
-import com.yangzhiwen.compass.Navigator
-import com.yangzhiwen.compass.NavigatorComponent
+import com.yangzhiwen.armour.compass.ComponentType
+import com.yangzhiwen.armour.compass.Navigator
+import com.yangzhiwen.armour.compass.NavigatorComponent
 
 
 /**
@@ -15,7 +15,7 @@ class ActivityComponent(val isPlugin: Boolean, module: String, component: String
 
 class ServiceComponent(val isPlugin: Boolean, module: String, component: String, realComponent: String) : NavigatorComponent(module, component, realComponent, ComponentType.instance.Service)
 
-class ReceiverComponent(val isPlugin: Boolean, module: String, component: String, realComponent: String, actions: Array<out String>) : NavigatorComponent(module, component, realComponent, ComponentType.instance.Receiver)
+class ReceiverComponent(val isPlugin: Boolean, module: String, component: String, realComponent: String, val actions: Array<out String>) : NavigatorComponent(module, component, realComponent, ComponentType.instance.Receiver)
 
 class ProviderComponent(val isPlugin: Boolean, module: String, component: String, realComponent: String) : NavigatorComponent(module, component, realComponent, ComponentType.instance.Provider)
 

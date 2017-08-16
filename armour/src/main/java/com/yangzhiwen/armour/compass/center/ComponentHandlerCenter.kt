@@ -1,6 +1,6 @@
 package com.yangzhiwen.compass.center
 
-import com.yangzhiwen.compass.NavigatorComponentHandler
+import com.yangzhiwen.armour.compass.NavigatorComponentHandler
 
 /**
  * Created by yangzhiwen on 2017/8/12.

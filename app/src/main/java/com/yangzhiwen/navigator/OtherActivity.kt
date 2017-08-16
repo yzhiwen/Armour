@@ -3,8 +3,8 @@ package com.yangzhiwen.navigator
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import com.yangzhiwen.compass.Navigator
-import com.yangzhiwen.navigator.ext.navigator.startActivity
+import com.yangzhiwen.armour.compass.Navigator
+import com.yangzhiwen.armour.ext.navigator.startActivity
 
 class OtherActivity : AppCompatActivity() {
 

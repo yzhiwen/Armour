@@ -1,4 +1,4 @@
-package com.yangzhiwen.compass
+package com.yangzhiwen.armour.compass
 
 import android.content.Context
 import com.yangzhiwen.compass.center.ComponentHandlerCenter
@@ -9,7 +9,6 @@ import com.yangzhiwen.compass.center.ComponentHandlerCenter
 class Navigator {
 
     var context: Context? = null
-    val modules = mutableMapOf<String, NavigatorModule>()
     val realComponentToModule = mutableMapOf<String, String>()
 
     companion object {
@@ -20,11 +19,16 @@ class Navigator {
 
     fun getModule(module: String): NavigatorModule? = modules[module]
 
-    fun registerModule(module: String): NavigatorModule? = modules.put(module, NavigatorModule(module))
+    fun registerModule(module: String): NavigatorModule {
+        val m = NavigatorModule(module)
+        modules.put(module, m)
+        return m
+    }
 
-    fun getModuleWithRegister(module: String): NavigatorModule = getModule(module) ?: registerModule(module)!! // !! 这里不应该发生Exception
+    fun getModuleWithRegister(module: String): NavigatorModule = getModule(module) ?: registerModule(module) // !! 这里不应该发生Exception
 
-    // module -> component list | no
+    // module -> component list | yes
+    val modules = mutableMapOf<String, NavigatorModule>()
     // component -> module | yes
     // realComponent -> component | no
 

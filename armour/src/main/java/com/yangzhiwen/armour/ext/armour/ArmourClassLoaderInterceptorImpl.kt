@@ -1,4 +1,4 @@
-package com.yangzhiwen.navigator.ext.armour
+package com.yangzhiwen.armour.ext.armour
 
 import com.yangzhiwen.armour.Armour
 import com.yangzhiwen.armour.ArmourClassLoaderInterceptor

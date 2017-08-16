@@ -1,4 +1,4 @@
-package com.yangzhiwen.compass
+package com.yangzhiwen.armour.compass
 
 
 /**

@@ -1,6 +1,6 @@
-package com.yangzhiwen.navigator.ext.navigator
+package com.yangzhiwen.armour.ext.navigator
 
-import com.yangzhiwen.compass.ComponentType
+import com.yangzhiwen.armour.compass.ComponentType
 
 /**
  * Created by yangzhiwen on 2017/8/12.

@@ -1,9 +1,8 @@
 package com.yangzhiwen.armour
 
 import android.app.Activity
-import android.content.Context
 import android.content.res.Resources
-import com.yangzhiwen.compass.Navigator
+import com.yangzhiwen.armour.compass.Navigator
 import java.lang.reflect.Field
 
 /**

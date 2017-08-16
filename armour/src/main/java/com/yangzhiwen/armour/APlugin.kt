@@ -1,7 +1,12 @@
 package com.yangzhiwen.armour
 
+import android.content.BroadcastReceiver
 import android.content.Context
-import com.yangzhiwen.compass.Navigator
+import android.content.IntentFilter
+import com.yangzhiwen.armour.ext.navigator.Receiver
+import com.yangzhiwen.armour.ext.navigator.ReceiverComponent
+import com.yangzhiwen.armour.compass.ComponentType
+import com.yangzhiwen.armour.compass.Navigator
 import dalvik.system.DexClassLoader
 
 /**
@@ -16,6 +21,22 @@ class APlugin(context: Context, name: String, path: String) {
         val moudle = Navigator.instance.getModule(name)
         val map = moudle?.componentMap
         map?.iterator()?.forEach { (k, v) -> run { println("$k,$v") } }
+
+
+        val module = Navigator.instance.getModule(name)
+        // init plugin receiver
+        module?.componentMap
+                ?.filter { it -> it.value.type == ComponentType.instance.Receiver }
+                ?.forEach {
+                    it ->
+                    val component = it.value as ReceiverComponent
+                    val receiver = classloader.loadClass(component.realComponent).newInstance() as BroadcastReceiver
+                    val filter = IntentFilter()
+                    for (action in component.actions) {
+                        filter.addAction(action)
+                    }
+                    context.registerReceiver(receiver, filter)
+                }
     }
 
 }

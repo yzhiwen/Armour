@@ -4,6 +4,7 @@ package com.yangzhiwen.navigator
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
@@ -52,16 +53,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.insert).setOnClickListener {
-            Navigator.instance.insert()
+            //            Navigator.instance.insert()
         }
 
         findViewById<Button>(R.id.delete).setOnClickListener {
-            Navigator.instance.delete(null,"",s)
+            //            Navigator.instance.delete(null,"",s)
         }
 
         findViewById<Button>(R.id.query).setOnClickListener {
-            Navigator.instance.query()
-            contentResolver.query()
+            //            Navigator.instance.query()
+            val ss = arrayOfNulls<String>(1)
+            val s = contentResolver.query(Uri.EMPTY, ss, "", ss, "")
         }
 
     }

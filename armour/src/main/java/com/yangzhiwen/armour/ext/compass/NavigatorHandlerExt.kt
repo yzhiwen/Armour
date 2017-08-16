@@ -49,6 +49,7 @@ class ActivityComponentHandler : NavigatorComponentHandler(ComponentType.instanc
     }
 }
 
+// todo 首先这里有个问题，如果要在宿主操作插件的ServiceConnection，那么就存在耦合，而且插件Service本身类可能不存在宿主，所以这是一种规范，所以最好不要在宿主中启动插件Service
 class ServiceComponentHandler : NavigatorComponentHandler(ComponentType.instance.Service) {
     companion object {
         val instance = ServiceComponentHandler()
@@ -90,34 +91,15 @@ class ContentProviderComponentHandler : NavigatorComponentHandler(ComponentType.
 
         if (component.isPlugin) {
 
-        } else {
-            val intent = Intent()
-
         }
 
         when (operation) {
-            is InsertContentOperation -> {
-            }
-            is DeleteContentOperation -> {
-            }
-            is QueryContentOperation -> {
-            }
+            is InsertContentOperation -> context.contentResolver.insert(operation.url, operation.values)
+            is DeleteContentOperation -> context.contentResolver.delete(operation.url, operation.where, operation.selectionArgs)
+            is QueryContentOperation -> operation.callback.onQuery(context.contentResolver.query(operation.url, operation.projection, operation.selection, operation.selectionArgs, operation.sortOrder))
         }
-
     }
-
 }
-
-// 首先这里有个问题，如果要在宿主操作插件的ServiceConnection，那么就存在耦合，而且插件Service本身类可能不存在宿主，所以这是一种规范，所以最好不要在宿主中启动插件Service
-//class SC : ServiceConnection, Serializable {
-//    override fun onServiceDisconnected(p0: ComponentName?) {
-//
-//    }
-//
-//    override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
-//        println("== === = =onServiceConnected")
-//    }
-//}
 
 fun Navigator.registerActivityComponentHandler()
         = registerComponentHandler(ComponentType.instance.Activity, ActivityComponentHandler.instance)

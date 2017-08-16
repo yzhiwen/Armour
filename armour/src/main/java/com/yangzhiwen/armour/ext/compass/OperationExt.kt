@@ -2,6 +2,7 @@ package com.yangzhiwen.armour.ext.compass
 
 import android.content.ContentValues
 import android.content.ServiceConnection
+import android.database.Cursor
 import android.net.Uri
 import com.yangzhiwen.armour.ArmourService
 import com.yangzhiwen.armour.compass.ComponentOperation
@@ -37,5 +38,9 @@ class BindServiceOperation(val sc: ServiceConnection) : ComponentOperation(Armou
 class UnbindServiceOperation(val sc: ServiceConnection) : ComponentOperation(ArmourService.UNBIND)
 
 class InsertContentOperation(val url: Uri, val values: ContentValues) : ComponentOperation()
-class QueryContentOperation(val url: Uri, val projection: Array<out String>, val selection: String, val selectionArgs: Array<out String>, val sortOrder: String) : ComponentOperation()
 class DeleteContentOperation(val url: Uri, val where: String, val selectionArgs: Array<out String>) : ComponentOperation()
+class QueryContentOperation(val url: Uri, val projection: Array<out String>, val selection: String, val selectionArgs: Array<out String>, val sortOrder: String, val callback: QueryCallback) : ComponentOperation()
+
+interface QueryCallback {
+    fun onQuery(cursor: Cursor)
+}

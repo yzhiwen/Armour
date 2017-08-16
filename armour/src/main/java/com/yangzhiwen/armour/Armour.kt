@@ -8,7 +8,6 @@ import android.app.Application
  */
 class Armour(context: Application) {
     val application = context
-    val applicationContext = context.applicationContext
     val armourClassLoader = ArmourClassLoader(application.classLoader)
     var classLoaderInterceptor: ArmourClassLoaderInterceptor? = null
 
@@ -27,7 +26,6 @@ class Armour(context: Application) {
         }
 
         fun instance() = ins
-
     }
 
     val map = mutableMapOf<String, APlugin>()

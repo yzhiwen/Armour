@@ -29,9 +29,7 @@ class ActivityLifecycleListener : Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityCreated(activity: Activity?, bundle: Bundle?) {
-        if (activity != null) {
-            Hacker.instance.hookActivityResource(activity)
-        }
+        if (activity != null) Hacker.instance.hookActivityResource(activity)
     }
 
     override fun onActivityPaused(activity: Activity?) {

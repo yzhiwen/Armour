@@ -49,7 +49,8 @@ class App : Application() {
         thread {
             val outPath = copy()
             path = outPath
-            val plugin = Armour.instance(this).instantPlugin("user_center", outPath)
+            println("load path : $path")
+            Armour.instance(this).instantPlugin("user_center", outPath)
         }
     }
 

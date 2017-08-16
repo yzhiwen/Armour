@@ -18,11 +18,6 @@ class APlugin(context: Context, name: String, path: String) {
     val classloader = DexClassLoader(path, DEX_OUT_PATH, null, context.classLoader)
 
     init {
-        val moudle = Navigator.instance.getModule(name)
-        val map = moudle?.componentMap
-        map?.iterator()?.forEach { (k, v) -> run { println("$k,$v") } }
-
-
         val module = Navigator.instance.getModule(name)
         // init plugin receiver
         module?.componentMap

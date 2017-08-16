@@ -1,4 +1,4 @@
-package com.yangzhiwen.armour.ext.navigator
+package com.yangzhiwen.armour.ext.compass
 
 import android.content.Intent
 import com.yangzhiwen.armour.ArmourService

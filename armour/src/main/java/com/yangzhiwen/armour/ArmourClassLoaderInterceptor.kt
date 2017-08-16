@@ -1,22 +1,28 @@
 package com.yangzhiwen.armour
 
+import com.yangzhiwen.armour.compass.NavigatorComponent
+
 /**
  * Created by yangzhiwen on 17/8/14.
  */
-abstract class ArmourClassLoaderInterceptor {
+class ArmourClassLoaderInterceptor {
+    companion object {
+        val instance = ArmourClassLoaderInterceptor()
+    }
 
-    val classMapToModule = mutableMapOf<String, String>()
-    val realClassMap = mutableMapOf<String, String>()
+    val componentMap = mutableMapOf<String, NavigatorComponent>()
 
-    open fun onLoadClass(name: String?): Class<*>? {
-
-        val module = classMapToModule[name] ?: return null
-        val realClass = realClassMap[name] ?: return null
+    fun onLoadClass(name: String?): Class<*>? {
+        val component = componentMap[name] ?: return null
 
         println("**********************************************")
-        println("ArmourClassLoaderInterceptor || load class $name to module $module for real class $realClass")
+        println("ArmourClassLoaderInterceptor || load class $name to component $component")
         println("**********************************************")
 
-        return Armour.instance()?.getPlugin(module)?.classloader?.loadClass(realClass) ?: return null
+        return Armour.instance()?.getPlugin(component.module)?.classloader?.loadClass(component.realComponent) ?: return null
+    }
+
+    fun addLoadInterceptor(name: String, component: NavigatorComponent) {
+        componentMap[name] = component
     }
 }

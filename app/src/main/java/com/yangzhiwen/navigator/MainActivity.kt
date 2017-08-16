@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import com.yangzhiwen.armour.compass.Navigator
-import com.yangzhiwen.armour.ext.navigator.*
+import com.yangzhiwen.armour.ext.compass.*
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package com.yangzhiwen.armour.ext.navigator
+package com.yangzhiwen.armour.ext.compass
 
 import android.content.ComponentName
 import android.content.Intent
@@ -8,6 +8,7 @@ import com.yangzhiwen.armour.compass.ComponentType
 import com.yangzhiwen.armour.compass.Navigator
 import com.yangzhiwen.armour.compass.NavigatorComponent
 import com.yangzhiwen.armour.compass.NavigatorComponentHandler
+import com.yangzhiwen.armour.ext.helper.parseClassName
 
 /**
  * Created by yangzhiwen on 2017/8/12.
@@ -27,24 +28,23 @@ class ActivityComponentHandler : NavigatorComponentHandler(ComponentType.instanc
         // 启动宿主组件
         // ClassLoader load的时候 宿主组件替换 插件Component
 
-
         // 插件 组件  关联 宿主 组件
-        Armour.instance()?.classLoaderInterceptor?.classMapToModule?.put("com.yangzhiwen.navigator.ProxyActivity", "user_center")
-        Armour.instance()?.classLoaderInterceptor?.realClassMap?.put("com.yangzhiwen.navigator.ProxyActivity", "com.yangzhiwen.demo.CenterActivity")
-
-        if (component.name == "center") {
+        if (component is ActivityComponent && component.isPlugin) {
+            // todo component 匹配 占坑组件
+            val proxy = "com.yangzhiwen.navigator.ProxyActivity"
+            val proxyPair = parseClassName(proxy)
+            Armour.instance()?.classLoaderInterceptor?.addLoadInterceptor(proxy, component)
             val intent = Intent()
-            intent.component = ComponentName("com.yangzhiwen.navigator", "com.yangzhiwen.navigator.ProxyActivity")
-            println("$intent")
-            println("${intent.component}")
-            println("${intent.extras}")
+            // todo 占坑组件
+            intent.component = ComponentName(proxyPair.first, proxy)
             Navigator.instance.context?.startActivity(intent)
             return
+        } else {
+            val intent = Intent()
+            val proxyPair = parseClassName(component.realComponent)
+            intent.component = ComponentName(proxyPair.first, component.realComponent)
+            Navigator.instance.context?.startActivity(intent)
         }
-
-        val intent = Intent()
-        intent.component = ComponentName("com.yangzhiwen.navigator", component.realComponent)
-        Navigator.instance.context?.startActivity(intent)
     }
 }
 
@@ -83,4 +83,3 @@ fun Navigator.registerActivityComponentHandler() {
 fun Navigator.registerServiceComponentHandler() {
     registerComponentHandler(ComponentType.instance.Service, ServiceComponentHandler.instance)
 }
-

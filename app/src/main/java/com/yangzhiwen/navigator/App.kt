@@ -4,9 +4,9 @@ import android.app.Application
 import android.content.res.Resources
 import com.yangzhiwen.armour.ActivityLifecycleListener
 import com.yangzhiwen.armour.Armour
+import com.yangzhiwen.armour.ArmourClassLoaderInterceptor
 import com.yangzhiwen.armour.compass.Navigator
-import com.yangzhiwen.armour.ext.armour.ArmourClassLoaderInterceptorImpl
-import com.yangzhiwen.armour.ext.navigator.*
+import com.yangzhiwen.armour.ext.compass.*
 import kotlin.concurrent.thread
 import java.io.File
 import java.io.FileInputStream
@@ -44,7 +44,7 @@ class App : Application() {
         Navigator.instance.registerServiceComponentHandler()
 
         Armour.instance(this)
-        Armour.instance(this).classLoaderInterceptor = ArmourClassLoaderInterceptorImpl()
+        Armour.instance(this).classLoaderInterceptor = ArmourClassLoaderInterceptor()
 
         thread {
             val outPath = copy()

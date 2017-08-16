@@ -30,7 +30,9 @@ class App : Application() {
 
         registerActivityLifecycleCallbacks(ActivityLifecycleListener.instance)
 
+        println(Navigator::class.java.classLoader)
         // todo 自动化 & 动态化
+        Navigator.instance.context = this
         Navigator.instance.registerActivityComponent(false, "host", "pay", "com.yangzhiwen.navigator.MainActivity")
         Navigator.instance.registerActivityComponent(false, "host", "other", "com.yangzhiwen.navigator.OtherActivity")
         Navigator.instance.registerActivityComponent(true, "user_center", "setting", "com.yangzhiwen.demo.MainActivity")

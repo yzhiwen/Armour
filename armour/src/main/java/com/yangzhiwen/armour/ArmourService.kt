@@ -1,8 +1,12 @@
 package com.yangzhiwen.armour
 
 import android.app.Service
+import android.content.ComponentName
 import android.content.Intent
+import android.content.ServiceConnection
+import android.os.Build
 import android.os.IBinder
+import com.yangzhiwen.armour.ext.helper.parseClassName
 
 /**
  * Created by yangzhiwen on 17/8/15.
@@ -17,8 +21,10 @@ class ArmourService : Service() {
         val STOP = "STOP"
         val BIND = "BIND"
         val UNBIND = "UNBIND"
+        val SERVICECONNECTION = "SERVICECONNECTION"
     }
 
+    // 多次调用bindService()，为什么onBind()只执行一次
     override fun onBind(p0: Intent?): IBinder? {
         return null
     }
@@ -40,6 +46,7 @@ class ArmourService : Service() {
         if (service == null) {
             val aPlugin = Armour.instance(this.application).getPlugin("user_center") ?: return super.onStartCommand(intent, flags, startId)
             service = aPlugin.classloader.loadClass(component).newInstance() as Service // todo 需要检查
+            // todo invoke attach
             service.onCreate()
             map[component] = service
         }
@@ -52,8 +59,18 @@ class ArmourService : Service() {
                 service.onDestroy()
                 map.remove(component)
             }
-//            BIND -> service.onBind(intent)
-//            UNBIND -> service.unbindService(null)
+            BIND -> {
+                // todo 只调用一次
+                val binder = service.onBind(intent)
+                val conn = intent.extras?.getSerializable(SERVICECONNECTION) ?: return super.onStartCommand(intent, flags, startId)
+                conn as ServiceConnection
+                val pair = parseClassName(component)
+                conn.onServiceConnected(ComponentName(pair.first, component), binder)
+            }
+            UNBIND -> {
+                map.remove(component)
+                service.unbindService(null)
+            }
         }
         return super.onStartCommand(intent, flags, startId)
     }

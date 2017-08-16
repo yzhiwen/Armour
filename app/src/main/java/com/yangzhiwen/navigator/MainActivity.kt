@@ -50,6 +50,20 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.bind_local_service).setOnClickListener {
             Navigator.instance.bindService("user_center", "user_service", SC(), "user_service arg xixi")
         }
+
+        findViewById<Button>(R.id.insert).setOnClickListener {
+            Navigator.instance.insert()
+        }
+
+        findViewById<Button>(R.id.delete).setOnClickListener {
+            Navigator.instance.delete(null,"",s)
+        }
+
+        findViewById<Button>(R.id.query).setOnClickListener {
+            Navigator.instance.query()
+            contentResolver.query()
+        }
+
     }
 
 

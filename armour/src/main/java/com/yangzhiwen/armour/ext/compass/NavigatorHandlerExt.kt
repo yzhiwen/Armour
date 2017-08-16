@@ -4,12 +4,10 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import android.renderscript.RenderScript
 import com.yangzhiwen.armour.Armour
 import com.yangzhiwen.armour.ArmourService
-import com.yangzhiwen.armour.compass.ComponentType
-import com.yangzhiwen.armour.compass.Navigator
-import com.yangzhiwen.armour.compass.NavigatorComponent
-import com.yangzhiwen.armour.compass.NavigatorComponentHandler
+import com.yangzhiwen.armour.compass.*
 import com.yangzhiwen.armour.ext.helper.parseClassName
 import java.io.Serializable
 
@@ -23,7 +21,7 @@ class ActivityComponentHandler : NavigatorComponentHandler(ComponentType.instanc
         val instance = ActivityComponentHandler()
     }
 
-    override fun onHandle(component: NavigatorComponent, operation: String, jsonArg: String) {
+    override fun onHandle(component: NavigatorComponent, operation: ComponentOperation, jsonArg: String) {
         println("On Activity Handle() :: " + component.name + " arg : " + jsonArg)
 
         // component 是否是插件
@@ -56,34 +54,58 @@ class ServiceComponentHandler : NavigatorComponentHandler(ComponentType.instance
         val instance = ServiceComponentHandler()
     }
 
-    override fun onHandle(component: NavigatorComponent, operation: String, jsonArg: String) {
+    override fun onHandle(component: NavigatorComponent, operation: ComponentOperation, jsonArg: String) {
         println("On Service Handle() :: $component arg :: $operation :: $jsonArg")
         if (component !is ServiceComponent) return
+        val context = Navigator.instance.context ?: return
+//            intent.component = ComponentName("com.yangzhiwen.armour", "com.yangzhiwen.armour.ArmourService") // Android5.x之后必须使用显式Intent调用Service
 
         // component 是否是插件
         // 启动本地用于代理Component的Service
         if (component.isPlugin) {
-            val context = Navigator.instance.context ?: return
             val intent = Intent(context, ArmourService::class.java)
-//            intent.component = ComponentName("com.yangzhiwen.armour", "com.yangzhiwen.armour.ArmourService") // Android5.x之后必须使用显式Intent调用Service
             intent.putExtra(ArmourService.COMPONENT, component.realComponent)
-            intent.putExtra(ArmourService.ARG_OP, operation)
-//            intent.putExtra(ArmourService.SERVICECONNECTION, component.sc) // 可以通过包装类
-
+            intent.putExtra(ArmourService.ARG_OP, operation.opt)
             context.startService(intent)
         } else {
-            val context = Navigator.instance.context ?: return
             val intent = Intent(context, javaClass.classLoader.loadClass(component.realComponent))
             when (operation) {
-                ArmourService.START -> context.startService(intent)
-                ArmourService.STOP -> context.stopService(intent)
-                ArmourService.BIND -> {
-                    context.bindService(intent, component.sc, 0)
-                }
-                ArmourService.UNBIND -> context.unbindService(component.sc)
+                is StartServiceOperation -> context.startService(intent)
+                is StopServiceOperation -> context.stopService(intent)
+                is BindServiceOperation -> context.bindService(intent, operation.sc, 0)
+                is UnbindServiceOperation -> context.unbindService(operation.sc)
             }
         }
     }
+}
+
+class ContentProviderComponentHandler : NavigatorComponentHandler(ComponentType.instance.Provider) {
+    companion object {
+        val instance = ServiceComponentHandler()
+    }
+
+    override fun onHandle(component: NavigatorComponent, operation: ComponentOperation, jsonArg: String) {
+        if (component !is ProviderComponent) return
+        val context = Navigator.instance.context ?: return
+
+        if (component.isPlugin) {
+
+        } else {
+            val intent = Intent()
+
+        }
+
+        when (operation) {
+            is InsertContentOperation -> {
+            }
+            is DeleteContentOperation -> {
+            }
+            is QueryContentOperation -> {
+            }
+        }
+
+    }
+
 }
 
 // 首先这里有个问题，如果要在宿主操作插件的ServiceConnection，那么就存在耦合，而且插件Service本身类可能不存在宿主，所以这是一种规范，所以最好不要在宿主中启动插件Service
@@ -97,10 +119,11 @@ class ServiceComponentHandler : NavigatorComponentHandler(ComponentType.instance
 //    }
 //}
 
-fun Navigator.registerActivityComponentHandler() {
-    registerComponentHandler(ComponentType.instance.Activity, ActivityComponentHandler.instance)
-}
+fun Navigator.registerActivityComponentHandler()
+        = registerComponentHandler(ComponentType.instance.Activity, ActivityComponentHandler.instance)
 
-fun Navigator.registerServiceComponentHandler() {
-    registerComponentHandler(ComponentType.instance.Service, ServiceComponentHandler.instance)
-}
+fun Navigator.registerServiceComponentHandler()
+        = registerComponentHandler(ComponentType.instance.Service, ServiceComponentHandler.instance)
+
+fun Navigator.registerProviderComponentHandler()
+        = registerComponentHandler(ComponentType.instance.Provider, ContentProviderComponentHandler.instance)

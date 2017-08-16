@@ -47,7 +47,7 @@ class Navigator {
 
     }
 
-    fun nav(module: String, name: String, operation: String, jsonArg: String) {
+    fun nav(module: String, name: String, operation: ComponentOperation, jsonArg: String = "") {
         val cmp = getModule(module)?.getComponent(name) ?: return
         val type = cmp.type
         ComponentHandlerCenter.instance.getComponentHandler(type)?.onHandle(cmp, operation, jsonArg)

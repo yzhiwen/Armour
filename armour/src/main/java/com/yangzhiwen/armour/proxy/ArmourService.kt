@@ -2,10 +2,12 @@ package com.yangzhiwen.armour.proxy
 
 import android.app.Service
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import com.yangzhiwen.armour.Armour
+import com.yangzhiwen.armour.Hacker
 import com.yangzhiwen.armour.ext.helper.parseClassPackage
 
 /**
@@ -43,9 +45,11 @@ open class ArmourService : Service() {
         var service = map[component]
         if (service == null) {
             val aPlugin = Armour.instance(this.application).getPlugin("user_center") ?: return super.onStartCommand(intent, flags, startId)
-            service = aPlugin.classloader.loadClass(component).newInstance() as Service // todo 需要检查
-            // todo invoke attach
-//            service.attachBaseContext(null)
+            // todo try catch
+            service = aPlugin.classloader.loadClass(component).newInstance() as Service
+            Hacker.on(service::class.java)
+                    .method("attachBaseContext", Context::class.java)
+                    ?.invoke(service, this)
             service.onCreate()
             map[component] = service
         }
@@ -59,7 +63,7 @@ open class ArmourService : Service() {
                 map.remove(component)
             }
             BIND -> {
-                // 多次调用bindService()， 只调用一次onBind()
+                // todo 多次调用bindService()，只调用一次onBind()
                 val binder = service.onBind(intent)
                 val conn = intent.extras?.getSerializable(SERVICECONNECTION) ?: return super.onStartCommand(intent, flags, startId)
                 conn as ServiceConnection
@@ -67,8 +71,10 @@ open class ArmourService : Service() {
                 conn.onServiceConnected(ComponentName(pn, component), binder)
             }
             UNBIND -> {
+                val conn = intent.extras?.getSerializable(SERVICECONNECTION) ?: return super.onStartCommand(intent, flags, startId)
+                conn as ServiceConnection
+                service.unbindService(conn)
                 map.remove(component)
-                service.unbindService(null)
             }
         }
         return super.onStartCommand(intent, flags, startId)

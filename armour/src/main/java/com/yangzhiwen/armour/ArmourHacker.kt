@@ -25,10 +25,8 @@ class ArmourHacker {
     }
 
 
-    // todo 再封装 抽离
     fun hookActivityResource(activity: Activity) {
-        // todo 是否需要hook
-        // apkPath 查找activity对应插件路径
+        // 根据 module 是否空 判断是否插件进行hook
         val module = Navigator.instance.getModuleByRealComponent(activity.javaClass.name) ?: return
         val apkPath = Armour.instance()?.getPlugin(module)?.pluginPath ?: return
 

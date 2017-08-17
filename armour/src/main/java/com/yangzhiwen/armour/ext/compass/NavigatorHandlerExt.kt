@@ -8,6 +8,7 @@ import com.yangzhiwen.armour.compass.*
 import com.yangzhiwen.armour.ext.helper.parseClassPackage
 import com.yangzhiwen.armour.ext.helper.wrapUrl
 import com.yangzhiwen.armour.proxy.ArmourActivity
+import com.yangzhiwen.armour.proxy.ArmourRemoteService
 
 /**
  * Created by yangzhiwen on 2017/8/12.
@@ -31,12 +32,8 @@ class ActivityComponentHandler : NavigatorComponentHandler(ComponentType.instanc
         if (component is ActivityComponent && component.isPlugin) {
             // todo component 匹配 占坑组件
             val proxy = "com.yangzhiwen.armour.proxy.ArmourActivity"
-//            val proxyPair = parseClassName(proxy)
             Armour.instance()?.classLoaderInterceptor?.addLoadInterceptor(proxy, component)
-//            val intent = Intent()
 //             todo 占坑组件
-//            intent.component = ComponentName(proxyPair.first, proxy)
-//            Navigator.instance.context?.startActivity(intent)
             context.startActivity(Intent(context, ArmourActivity::class.java)) // 隐式启动android library Activity 会报错：android.content.ActivityNotFoundException: Unable to find explicit activity class
             return
         } else {
@@ -58,12 +55,13 @@ class ServiceComponentHandler : NavigatorComponentHandler(ComponentType.instance
         println("On Service Handle() :: $component arg :: $operation :: $jsonArg")
         if (component !is ServiceComponent) return
         val context = Navigator.instance.context ?: return
-//            intent.component = ComponentName("com.yangzhiwen.armour", "com.yangzhiwen.armour.proxy.ArmourService") // Android5.x之后必须使用显式Intent调用Service
+//      intent.component = ComponentName("com.yangzhiwen.armour", "com.yangzhiwen.armour.proxy.ArmourService") // Android5.x之后必须使用显式Intent调用Service
 
-        // component 是否是插件
-        // 启动本地用于代理Component的Service
         if (component.isPlugin) {
-            val intent = Intent(context, ArmourService::class.java)
+            val intent: Intent
+            if (component.isRemote) intent = Intent(context, ArmourRemoteService::class.java)
+            else intent = Intent(context, ArmourService::class.java)
+
             intent.putExtra(ArmourService.COMPONENT, component.realComponent)
             intent.putExtra(ArmourService.ARG_OP, operation.opt)
             context.startService(intent)

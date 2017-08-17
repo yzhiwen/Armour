@@ -5,6 +5,6 @@ package com.yangzhiwen.armour.compass
  */
 interface NavigatorInterceptor {
 
-    fun onInterce(original: NavigatorComponent, current: NavigatorComponent)
+    fun onIntercept(original: NavigatorComponent, current: NavigatorComponent)
 
 }

@@ -6,13 +6,15 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application>
-        <service android:name=".ArmourService" />
+        <activity android:name=".proxy.ArmourActivity" />
+
+        <service android:name=".proxy.ArmourService" />
 
         <provider
-            android:name=".ArmourContentProvider"
+            android:name=".proxy.ArmourContentProvider"
             android:authorities="com.yangzhiwen.armour"
             android:enabled="true"
-            android:exported="true"></provider>
+            android:exported="true" />
     </application>
 
 </manifest>

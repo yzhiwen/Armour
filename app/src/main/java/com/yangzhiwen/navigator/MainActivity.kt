@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        App.res = resources
 
         //  todo
 //        val layout = LinearLayout(this)
@@ -75,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
-            println("== === = =onServiceConnected")
+            println("========== onServiceConnected")
         }
     }
 }

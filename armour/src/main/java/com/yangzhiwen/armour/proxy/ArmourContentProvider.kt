@@ -1,9 +1,10 @@
-package com.yangzhiwen.armour
+package com.yangzhiwen.armour.proxy
 
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
+import com.yangzhiwen.armour.Armour
 import com.yangzhiwen.armour.compass.Navigator
 
 class ArmourContentProvider : ContentProvider() {

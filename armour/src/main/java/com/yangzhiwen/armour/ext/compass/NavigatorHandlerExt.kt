@@ -3,7 +3,7 @@ package com.yangzhiwen.armour.ext.compass
 import android.content.ComponentName
 import android.content.Intent
 import com.yangzhiwen.armour.Armour
-import com.yangzhiwen.armour.ArmourService
+import com.yangzhiwen.armour.proxy.ArmourService
 import com.yangzhiwen.armour.compass.*
 import com.yangzhiwen.armour.ext.helper.parseClassName
 import com.yangzhiwen.armour.ext.helper.wrapUrl
@@ -29,7 +29,8 @@ class ActivityComponentHandler : NavigatorComponentHandler(ComponentType.instanc
         // 插件 组件  关联 宿主 组件
         if (component is ActivityComponent && component.isPlugin) {
             // todo component 匹配 占坑组件
-            val proxy = "com.yangzhiwen.navigator.ProxyActivity"
+            TODO("")
+            val proxy = "com.yangzhiwen.armour.proxy.ArmourActivity"
             val proxyPair = parseClassName(proxy)
             Armour.instance()?.classLoaderInterceptor?.addLoadInterceptor(proxy, component)
             val intent = Intent()
@@ -56,7 +57,7 @@ class ServiceComponentHandler : NavigatorComponentHandler(ComponentType.instance
         println("On Service Handle() :: $component arg :: $operation :: $jsonArg")
         if (component !is ServiceComponent) return
         val context = Navigator.instance.context ?: return
-//            intent.component = ComponentName("com.yangzhiwen.armour", "com.yangzhiwen.armour.ArmourService") // Android5.x之后必须使用显式Intent调用Service
+//            intent.component = ComponentName("com.yangzhiwen.armour", "com.yangzhiwen.armour.proxy.ArmourService") // Android5.x之后必须使用显式Intent调用Service
 
         // component 是否是插件
         // 启动本地用于代理Component的Service

@@ -1,7 +1,7 @@
 package com.yangzhiwen.armour.ext.helper
 
 import android.net.Uri
-import com.yangzhiwen.armour.ArmourContentProvider
+import com.yangzhiwen.armour.proxy.ArmourContentProvider
 import com.yangzhiwen.armour.compass.NavigatorComponent
 
 /**

@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.content.ServiceConnection
 import android.database.Cursor
 import android.net.Uri
-import com.yangzhiwen.armour.ArmourService
+import com.yangzhiwen.armour.proxy.ArmourService
 import com.yangzhiwen.armour.compass.ComponentOperation
 
 /**

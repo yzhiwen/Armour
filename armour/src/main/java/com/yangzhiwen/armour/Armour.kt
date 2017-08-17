@@ -9,11 +9,12 @@ import android.app.Application
 class Armour(context: Application) {
     val application = context
     val armourClassLoader = ArmourClassLoader(application.classLoader)
-    var classLoaderInterceptor: ArmourClassLoaderInterceptor? = null
+    var classLoaderInterceptor = ArmourClassLoaderInterceptor()
 
     init {
         println("init armour")
         ArmourHacker.instance.hackClassLoader(context, armourClassLoader)
+        application.registerActivityLifecycleCallbacks(ActivityLifecycleListener.instance)
     }
 
     companion object {

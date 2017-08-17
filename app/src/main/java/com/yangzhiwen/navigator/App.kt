@@ -1,11 +1,8 @@
 package com.yangzhiwen.navigator
 
 import android.app.Application
-import android.content.res.Resources
 import android.net.Uri
-import com.yangzhiwen.armour.ActivityLifecycleListener
 import com.yangzhiwen.armour.Armour
-import com.yangzhiwen.armour.ArmourClassLoaderInterceptor
 import com.yangzhiwen.armour.compass.Navigator
 import com.yangzhiwen.armour.ext.compass.*
 import kotlin.concurrent.thread
@@ -19,20 +16,10 @@ import java.io.FileOutputStream
  */
 class App : Application() {
 
-    companion object {
-        var instance: App? = null
-        var path: String? = null
-        var res: Resources? = null
-    }
-
     override fun onCreate() {
         super.onCreate()
-        instance = this
 
-        registerActivityLifecycleCallbacks(ActivityLifecycleListener.instance)
-
-        println(Navigator::class.java.classLoader)
-        // todo 自动化 & 动态化
+        // todo 自动化 & 动态化 路由
         Navigator.instance.context = this
         Navigator.instance.registerActivityComponent(false, "host", "pay", "com.yangzhiwen.navigator.MainActivity")
         Navigator.instance.registerActivityComponent(false, "host", "other", "com.yangzhiwen.navigator.OtherActivity")
@@ -50,12 +37,9 @@ class App : Application() {
         Navigator.instance.registerProviderComponentHandler()
 
         Armour.instance(this)
-        Armour.instance(this).classLoaderInterceptor = ArmourClassLoaderInterceptor()
 
         thread {
             val outPath = copy()
-            path = outPath
-            println("load path : $path")
             Armour.instance(this).instantPlugin("user_center", outPath)
         }
     }

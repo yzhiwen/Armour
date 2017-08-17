@@ -15,6 +15,5 @@ class OtherActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btn).setOnClickListener {
             Navigator.instance.startActivity("host", "pay", "aaa")
         }
-
     }
 }

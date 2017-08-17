@@ -37,6 +37,6 @@ class StopServiceOperation : ComponentOperation(ArmourService.STOP) {
 class BindServiceOperation(val sc: ServiceConnection) : ComponentOperation(ArmourService.BIND)
 class UnbindServiceOperation(val sc: ServiceConnection) : ComponentOperation(ArmourService.UNBIND)
 
-class InsertContentOperation(var url: Uri, val values: ContentValues?) : ComponentOperation()
+class InsertContentOperation(var url: Uri, val values: ContentValues) : ComponentOperation()
 class DeleteContentOperation(var url: Uri, val where: String?, val selectionArgs: Array<out String>?) : ComponentOperation()
 class QueryContentOperation(var url: Uri, val projection: Array<out String>?, val selection: String?, val selectionArgs: Array<out String>?, val sortOrder: String?, val callback: (c: Cursor?) -> Unit) : ComponentOperation()

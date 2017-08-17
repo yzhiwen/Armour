@@ -6,12 +6,12 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import com.yangzhiwen.armour.Armour
-import com.yangzhiwen.armour.ext.helper.parseClassName
+import com.yangzhiwen.armour.ext.helper.parseClassPackage
 
 /**
  * Created by yangzhiwen on 17/8/15.
  */
-class ArmourService : Service() {
+open class ArmourService : Service() {
 
     companion object {
         val COMPONENT = "COMPONENT"
@@ -24,7 +24,6 @@ class ArmourService : Service() {
         val SERVICECONNECTION = "SERVICECONNECTION"
     }
 
-    // 多次调用bindService()，为什么onBind()只执行一次
     override fun onBind(p0: Intent?): IBinder? {
         return null
     }
@@ -39,9 +38,8 @@ class ArmourService : Service() {
         println(" == ArmourService onStartCommand ")
 
         val component = intent?.getStringExtra(COMPONENT) ?: return super.onStartCommand(intent, flags, startId)
-
         println(" == ArmourService onStartCommand $component")
-        // todo 这里可以用函数式
+
         var service = map[component]
         if (service == null) {
             val aPlugin = Armour.instance(this.application).getPlugin("user_center") ?: return super.onStartCommand(intent, flags, startId)
@@ -55,17 +53,17 @@ class ArmourService : Service() {
         when (operation) {
             START -> service.onStartCommand(intent, flags, startId)
             STOP -> {
-                // todo 是否需要判断是否bind
+                // 这里不判断是否bind
                 service.onDestroy()
                 map.remove(component)
             }
             BIND -> {
-                // todo 只调用一次
+                // 多次调用bindService()， 只调用一次onBind()
                 val binder = service.onBind(intent)
                 val conn = intent.extras?.getSerializable(SERVICECONNECTION) ?: return super.onStartCommand(intent, flags, startId)
                 conn as ServiceConnection
-                val pair = parseClassName(component)
-                conn.onServiceConnected(ComponentName(pair.first, component), binder)
+                val pn = parseClassPackage(component)
+                conn.onServiceConnected(ComponentName(pn, component), binder)
             }
             UNBIND -> {
                 map.remove(component)

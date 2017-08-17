@@ -19,10 +19,10 @@
 
 
     <Button
-        android:id="@+id/user"
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="go user center main"
+        android:text="启动插件Main Activity"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -104,9 +104,9 @@
 
     <Button
         android:id="@+id/delete"
-        android:text="delete provider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="delete provider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

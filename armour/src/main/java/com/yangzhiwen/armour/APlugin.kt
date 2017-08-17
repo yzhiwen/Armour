@@ -33,5 +33,4 @@ class APlugin(context: Context, name: String, path: String) {
                     context.registerReceiver(receiver, filter)
                 }
     }
-
 }

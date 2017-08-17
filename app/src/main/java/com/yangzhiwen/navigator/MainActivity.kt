@@ -2,6 +2,7 @@ package com.yangzhiwen.navigator
 
 
 import android.content.ComponentName
+import android.content.ContentValues
 import android.content.Intent
 import android.content.ServiceConnection
 import android.net.Uri
@@ -29,8 +30,8 @@ class MainActivity : AppCompatActivity() {
             Navigator.instance.startActivity("host", "other", "aaa")
         }
 
-        findViewById<Button>(R.id.user).setOnClickListener {
-            Navigator.instance.startActivity("user_center", "setting", "arg")
+        findViewById<Button>(R.id.main).setOnClickListener {
+            Navigator.instance.startActivity("user_center", "main", "arg")
         }
 
         findViewById<Button>(R.id.user2).setOnClickListener {
@@ -54,7 +55,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.insert).setOnClickListener {
-            Navigator.instance.insert("user_center", "user_provider", Uri.parse("com.yangzhiwen.user"), null)
+            val cv = ContentValues()
+            Navigator.instance.insert("user_center", "user_provider", Uri.parse("com.yangzhiwen.user"), cv)
         }
 
         findViewById<Button>(R.id.delete).setOnClickListener {

@@ -5,7 +5,7 @@ import android.content.Intent
 import com.yangzhiwen.armour.Armour
 import com.yangzhiwen.armour.proxy.ArmourService
 import com.yangzhiwen.armour.compass.*
-import com.yangzhiwen.armour.ext.helper.parseClassName
+import com.yangzhiwen.armour.ext.helper.parseClassPackage
 import com.yangzhiwen.armour.ext.helper.wrapUrl
 import com.yangzhiwen.armour.proxy.ArmourActivity
 
@@ -41,8 +41,8 @@ class ActivityComponentHandler : NavigatorComponentHandler(ComponentType.instanc
             return
         } else {
             val intent = Intent()
-            val proxyPair = parseClassName(component.realComponent)
-            intent.component = ComponentName(proxyPair.first, component.realComponent)
+            val pn = parseClassPackage(component.realComponent)
+            intent.component = ComponentName(pn, component.realComponent)
             context.startActivity(intent)
         }
     }

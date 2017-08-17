@@ -9,14 +9,11 @@ import com.yangzhiwen.armour.compass.NavigatorComponent
  */
 
 // todo 测试用例
-fun parseClassName(className: String): Pair<String, String> {
+fun parseClassPackage(className: String): String {
     val index = className.lastIndexOf(".")
-    if (index == -1) return Pair("", className)
-    else {
-        val packageName = className.subSequence(0, index).toString()
-        val name = className.subSequence(index, className.length).toString()
-        return Pair(packageName, name)
-    }
+    if (index == -1) return ""
+    else return className.subSequence(0, index).toString()
+//  val name = className.subSequence(index, className.length).toString()
 }
 
 

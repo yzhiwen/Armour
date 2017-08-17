@@ -16,7 +16,7 @@ import com.yangzhiwen.armour.compass.NavigatorComponent
 // Component Extensions
 class ActivityComponent(val isPlugin: Boolean, module: String, component: String, realComponent: String) : NavigatorComponent(module, component, realComponent, ComponentType.instance.Activity)
 
-class ServiceComponent(val isPlugin: Boolean, module: String, component: String, realComponent: String) : NavigatorComponent(module, component, realComponent, ComponentType.instance.Service)
+class ServiceComponent(val isPlugin: Boolean, module: String, component: String, realComponent: String, val isRemote: Boolean) : NavigatorComponent(module, component, realComponent, ComponentType.instance.Service)
 
 class ReceiverComponent(val isPlugin: Boolean, module: String, component: String, realComponent: String, val actions: Array<out String>) : NavigatorComponent(module, component, realComponent, ComponentType.instance.Receiver)
 
@@ -26,8 +26,8 @@ class ProviderComponent(val isPlugin: Boolean, module: String, component: String
 fun Navigator.registerActivityComponent(isPlugin: Boolean, module: String, name: String, realComponent: String)
         = registerComponent(ActivityComponent(isPlugin, module, name, realComponent))
 
-fun Navigator.registerServiceComponent(isPlugin: Boolean, module: String, name: String, realComponent: String)
-        = registerComponent(ServiceComponent(isPlugin, module, name, realComponent))
+fun Navigator.registerServiceComponent(isPlugin: Boolean, module: String, name: String, realComponent: String, isRemote: Boolean)
+        = registerComponent(ServiceComponent(isPlugin, module, name, realComponent, isRemote))
 
 fun Navigator.registerReceiverComponent(isPlugin: Boolean, module: String, name: String, realComponent: String, vararg actions: String)
         = registerComponent(ReceiverComponent(isPlugin, module, name, realComponent, actions))
@@ -60,7 +60,7 @@ fun Navigator.sendBroadcast(intent: Intent)
         = context?.sendBroadcast(intent)
 
 // Provider Extensions
-fun Navigator.insert(module: String, component: String, url: Uri, values: ContentValues?)
+fun Navigator.insert(module: String, component: String, url: Uri, values: ContentValues)
         = nav(module, component, InsertContentOperation(url, values))
 
 //Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder

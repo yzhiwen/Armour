@@ -21,13 +21,17 @@ class App : Application() {
 
         Armour.instance(this)
 
-        // todo 自动化 & 动态化 路由
         Navigator.instance.context = this
+        // todo 自动化 & 动态化
+        // 宿主路由
         Navigator.instance.registerActivityComponent(false, "host", "pay", "com.yangzhiwen.navigator.MainActivity")
         Navigator.instance.registerActivityComponent(false, "host", "other", "com.yangzhiwen.navigator.OtherActivity")
-        Navigator.instance.registerActivityComponent(true, "user_center", "setting", "com.yangzhiwen.demo.MainActivity")
+
+        // 插件 路由
+        Navigator.instance.registerActivityComponent(true, "user_center", "main", "com.yangzhiwen.demo.MainActivity")
         Navigator.instance.registerActivityComponent(true, "user_center", "center", "com.yangzhiwen.demo.CenterActivity")
-        Navigator.instance.registerServiceComponent(true, "user_center", "user_service", "com.yangzhiwen.demo.UserCenterService")
+        Navigator.instance.registerServiceComponent(true, "user_center", "user_service", "com.yangzhiwen.demo.UserCenterService", false)
+        Navigator.instance.registerServiceComponent(true, "user_center", "user_service", "com.yangzhiwen.demo.UserRemoteService", true)
 
         val actions = arrayOf("user_center_msg", "user_center_setting_msg")
         Navigator.instance.registerReceiverComponent(true, "user_center", "user_center_receiver", "com.yangzhiwen.demo.UserCenterReceiver", *actions)

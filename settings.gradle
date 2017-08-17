@@ -1,1 +1,1 @@
-include ':app', ':armour'
+include ':app', ':armour', ':armourplugin'

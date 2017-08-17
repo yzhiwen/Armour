@@ -19,11 +19,11 @@ class APlugin(context: Context, name: String, path: String) {
 
     init {
         val module = Navigator.instance.getModule(name)
+        // todo receiver context res
         // init plugin receiver
         module?.componentMap
-                ?.filter { it -> it.value.type == ComponentType.instance.Receiver }
+                ?.filter { it.value.type == ComponentType.instance.Receiver }
                 ?.forEach {
-                    it ->
                     val component = it.value as ReceiverComponent
                     val receiver = classloader.loadClass(component.realComponent).newInstance() as BroadcastReceiver
                     val filter = IntentFilter()

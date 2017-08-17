@@ -11,6 +11,7 @@ import android.os.IBinder
 import android.widget.Button
 import com.yangzhiwen.armour.compass.Navigator
 import com.yangzhiwen.armour.ext.compass.*
+import com.yangzhiwen.armour.proxy.ArmourActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 //        println(layout.layoutParams)  // null
 //        println(layout.layoutParams.width) // java.lang.NullPointerException: Attempt to read from field 'int android.view.ViewGroup$LayoutParams.width' on a null object reference
 
+        println(ArmourActivity::class.java)
         findViewById<Button>(R.id.btn).setOnClickListener {
             Navigator.instance.startActivity("host", "other", "aaa")
         }

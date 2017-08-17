@@ -7,6 +7,7 @@ import com.yangzhiwen.armour.proxy.ArmourService
 import com.yangzhiwen.armour.compass.*
 import com.yangzhiwen.armour.ext.helper.parseClassName
 import com.yangzhiwen.armour.ext.helper.wrapUrl
+import com.yangzhiwen.armour.proxy.ArmourActivity
 
 /**
  * Created by yangzhiwen on 2017/8/12.
@@ -20,7 +21,7 @@ class ActivityComponentHandler : NavigatorComponentHandler(ComponentType.instanc
 
     override fun onHandle(component: NavigatorComponent, operation: ComponentOperation, jsonArg: String) {
         println("On Activity Handle() :: " + component.name + " arg : " + jsonArg)
-
+        val context = Navigator.instance.context ?: return
         // component 是否是插件
         // component 关联（匹配） 宿主组件
         // 启动宿主组件
@@ -29,20 +30,20 @@ class ActivityComponentHandler : NavigatorComponentHandler(ComponentType.instanc
         // 插件 组件  关联 宿主 组件
         if (component is ActivityComponent && component.isPlugin) {
             // todo component 匹配 占坑组件
-            TODO("")
             val proxy = "com.yangzhiwen.armour.proxy.ArmourActivity"
-            val proxyPair = parseClassName(proxy)
+//            val proxyPair = parseClassName(proxy)
             Armour.instance()?.classLoaderInterceptor?.addLoadInterceptor(proxy, component)
-            val intent = Intent()
-            // todo 占坑组件
-            intent.component = ComponentName(proxyPair.first, proxy)
-            Navigator.instance.context?.startActivity(intent)
+//            val intent = Intent()
+//             todo 占坑组件
+//            intent.component = ComponentName(proxyPair.first, proxy)
+//            Navigator.instance.context?.startActivity(intent)
+            context.startActivity(Intent(context, ArmourActivity::class.java)) // 隐式启动android library Activity 会报错：android.content.ActivityNotFoundException: Unable to find explicit activity class
             return
         } else {
             val intent = Intent()
             val proxyPair = parseClassName(component.realComponent)
             intent.component = ComponentName(proxyPair.first, component.realComponent)
-            Navigator.instance.context?.startActivity(intent)
+            context.startActivity(intent)
         }
     }
 }

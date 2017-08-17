@@ -19,6 +19,8 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        Armour.instance(this)
+
         // todo 自动化 & 动态化 路由
         Navigator.instance.context = this
         Navigator.instance.registerActivityComponent(false, "host", "pay", "com.yangzhiwen.navigator.MainActivity")
@@ -35,8 +37,6 @@ class App : Application() {
         Navigator.instance.registerActivityComponentHandler()
         Navigator.instance.registerServiceComponentHandler()
         Navigator.instance.registerProviderComponentHandler()
-
-        Armour.instance(this)
 
         thread {
             val outPath = copy()

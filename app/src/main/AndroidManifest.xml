@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yangzhiwen.navigator">
 
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -19,7 +18,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".OtherActivity" />
-
     </application>
 
 </manifest>

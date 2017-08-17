@@ -45,6 +45,7 @@ open class ArmourService : Service() {
             val aPlugin = Armour.instance(this.application).getPlugin("user_center") ?: return super.onStartCommand(intent, flags, startId)
             service = aPlugin.classloader.loadClass(component).newInstance() as Service // todo 需要检查
             // todo invoke attach
+//            service.attachBaseContext(null)
             service.onCreate()
             map[component] = service
         }

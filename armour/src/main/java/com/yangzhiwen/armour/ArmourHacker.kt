@@ -1,7 +1,9 @@
 package com.yangzhiwen.armour
 
+import android.app.Activity
 import android.app.Application
-import android.content.Context
+import android.content.res.Resources
+import com.yangzhiwen.armour.compass.Navigator
 
 /**
  * Created by yangzhiwen on 2017/8/13.
@@ -13,12 +15,50 @@ class ArmourHacker {
     }
 
     fun hackClassLoader(context: Application, classLoader: ArmourClassLoader) {
-        val packageInfoField = context.baseContext.javaClass.getDeclaredField("mPackageInfo")
-        packageInfoField.isAccessible = true
-        val packageInfo = packageInfoField.get(context.baseContext)
+        val packageInfo = Hacker.on(context.baseContext.javaClass)
+                .field("mPackageInfo")
+                ?.get(context.baseContext) ?: return
 
-        val defaultClassLoaderField = packageInfo.javaClass.getDeclaredField("mClassLoader")
-        defaultClassLoaderField.isAccessible = true
-        defaultClassLoaderField.set(packageInfo, classLoader)
+        Hacker.on(packageInfo.javaClass)
+                .field("mClassLoader")
+                ?.set(packageInfo, classLoader)
+    }
+
+
+    // todo 再封装 抽离
+    fun hookActivityResource(activity: Activity) {
+        // todo 是否需要hook
+        // apkPath 查找activity对应插件路径
+        val module = Navigator.instance.getModuleByRealComponent(activity.javaClass.name) ?: return
+        val apkPath = Armour.instance()?.getPlugin(module)?.pluginPath ?: return
+
+        val oldResources = activity.resources ?: return //todo 可能为空
+        val newAssetManager = oldResources.assets.javaClass.newInstance()
+        val result = Hacker.on(newAssetManager.javaClass)
+                .method("addAssetPath", String::class.java)
+                ?.invoke(newAssetManager, apkPath) as Int
+        if (result == 0) {
+            println("addAssetPath return 0 on the module: $module")
+            return
+        }
+
+        // hook ContextThemeWrapper 的 mResource
+        val newR = Resources(newAssetManager, oldResources.displayMetrics, oldResources.configuration)
+        Hacker.on(activity.javaClass)
+                .field("mResources")
+                ?.set(activity, newR)
+
+
+        // hook mBase 的 mResource属性
+//        val mBaseField = findField(activity.javaClass, "mBase") ?: return
+//        mBaseField.isAccessible = true
+//        val mBase = mBaseField.get(activity)
+//        println("mBase : $mBase")
+//
+//        val resField = findField(mBase.javaClass, "mResources") ?: return
+//        resField.isAccessible = true
+//        println("resField : $resField : ${resField.get(mBase)}")
+
+//        resField.set(mBase, newR)
     }
 }

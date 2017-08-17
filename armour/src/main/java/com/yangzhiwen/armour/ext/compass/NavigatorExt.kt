@@ -3,6 +3,7 @@ package com.yangzhiwen.armour.ext.compass
 import android.content.ContentValues
 import android.content.Intent
 import android.content.ServiceConnection
+import android.database.Cursor
 import android.net.Uri
 import com.yangzhiwen.armour.compass.ComponentType
 import com.yangzhiwen.armour.compass.Navigator
@@ -19,7 +20,7 @@ class ServiceComponent(val isPlugin: Boolean, module: String, component: String,
 
 class ReceiverComponent(val isPlugin: Boolean, module: String, component: String, realComponent: String, val actions: Array<out String>) : NavigatorComponent(module, component, realComponent, ComponentType.instance.Receiver)
 
-class ProviderComponent(val isPlugin: Boolean, module: String, component: String, realComponent: String, val url: Uri) : NavigatorComponent(module, component, realComponent, ComponentType.instance.Provider)
+class ProviderComponent(val isPlugin: Boolean, module: String, component: String, realComponent: String, var url: Uri) : NavigatorComponent(module, component, realComponent, ComponentType.instance.Provider)
 
 // Component Register Extensions
 fun Navigator.registerActivityComponent(isPlugin: Boolean, module: String, name: String, realComponent: String)
@@ -59,13 +60,13 @@ fun Navigator.sendBroadcast(intent: Intent)
         = context?.sendBroadcast(intent)
 
 // Provider Extensions
-fun Navigator.insert(module: String, component: String, url: Uri, values: ContentValues)
+fun Navigator.insert(module: String, component: String, url: Uri, values: ContentValues?)
         = nav(module, component, InsertContentOperation(url, values))
 
 //Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder
-fun Navigator.query(module: String, component: String, url: Uri, projection: Array<out String>, selection: String, selectionArgs: Array<out String>, sortOrder: String)
-        = nav(module, component, QueryContentOperation(url, projection, selection, selectionArgs, sortOrder))
+fun Navigator.query(module: String, component: String, url: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String, callback: (c: Cursor?) -> Unit)
+        = nav(module, component, QueryContentOperation(url, projection, selection, selectionArgs, sortOrder, callback))
 
 //Uri url, String where, String[] selectionArgs
-fun Navigator.delete(module: String, component: String, url: Uri, where: String, selectionArgs: Array<out String>)
+fun Navigator.delete(module: String, component: String, url: Uri, where: String?, selectionArgs: Array<out String>?)
         = nav(module, component, DeleteContentOperation(url, where, selectionArgs))

@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
 import android.widget.Button
+import com.yangzhiwen.armour.ArmourContentProvider
 import com.yangzhiwen.armour.compass.Navigator
 import com.yangzhiwen.armour.ext.compass.*
 
@@ -53,19 +54,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.insert).setOnClickListener {
-            //            Navigator.instance.insert()
+            Navigator.instance.insert("user_center", "user_provider", Uri.parse("com.yangzhiwen.user"), null)
         }
 
         findViewById<Button>(R.id.delete).setOnClickListener {
-            //            Navigator.instance.delete(null,"",s)
+            Navigator.instance.delete("user_center", "user_provider", Uri.parse("com.yangzhiwen.user"), null, null)
         }
 
         findViewById<Button>(R.id.query).setOnClickListener {
-            //            Navigator.instance.query()
-            val ss = arrayOfNulls<String>(1)
-            val s = contentResolver.query(Uri.EMPTY, ss, "", ss, "")
+            Navigator.instance.query("user_center", "user_provider", Uri.parse("com.yangzhiwen.user"), null, null, null, "") {
+                cursor ->
+                println(cursor)
+            }
         }
-
     }
 
 

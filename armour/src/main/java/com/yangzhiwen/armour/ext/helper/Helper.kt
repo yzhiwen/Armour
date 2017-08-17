@@ -1,5 +1,9 @@
 package com.yangzhiwen.armour.ext.helper
 
+import android.net.Uri
+import com.yangzhiwen.armour.ArmourContentProvider
+import com.yangzhiwen.armour.compass.NavigatorComponent
+
 /**
  * Created by yangzhiwen on 17/8/16.
  */
@@ -13,4 +17,11 @@ fun parseClassName(className: String): Pair<String, String> {
         val name = className.subSequence(index, className.length).toString()
         return Pair(packageName, name)
     }
+}
+
+
+fun wrapUrl(component: NavigatorComponent, url: Uri): Uri {
+    val oUrl = url.toString()
+    val newUrl = "${ArmourContentProvider.URI}/?${ArmourContentProvider.MODULE}=${component.module}&${ArmourContentProvider.COMPONENT}=${component.name}&${ArmourContentProvider.PLUGIN_URI}=$oUrl"
+    return Uri.parse(newUrl)
 }

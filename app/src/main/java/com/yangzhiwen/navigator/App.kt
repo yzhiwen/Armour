@@ -2,6 +2,7 @@ package com.yangzhiwen.navigator
 
 import android.app.Application
 import android.content.res.Resources
+import android.net.Uri
 import com.yangzhiwen.armour.ActivityLifecycleListener
 import com.yangzhiwen.armour.Armour
 import com.yangzhiwen.armour.ArmourClassLoaderInterceptor
@@ -42,8 +43,11 @@ class App : Application() {
         val actions = arrayOf("user_center_msg", "user_center_setting_msg")
         Navigator.instance.registerReceiverComponent(true, "user_center", "user_center_receiver", "com.yangzhiwen.demo.UserCenterReceiver", *actions)
 
+        Navigator.instance.registerProviderComponent(true, "user_center", "user_provider", "com.yangzhiwen.demo.UserContentProvider", Uri.parse("com.yangzhiwen.user"))
+
         Navigator.instance.registerActivityComponentHandler()
         Navigator.instance.registerServiceComponentHandler()
+        Navigator.instance.registerProviderComponentHandler()
 
         Armour.instance(this)
         Armour.instance(this).classLoaderInterceptor = ArmourClassLoaderInterceptor()

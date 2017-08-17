@@ -2,14 +2,11 @@ package com.yangzhiwen.armour.ext.compass
 
 import android.content.ComponentName
 import android.content.Intent
-import android.content.ServiceConnection
-import android.os.IBinder
-import android.renderscript.RenderScript
 import com.yangzhiwen.armour.Armour
 import com.yangzhiwen.armour.ArmourService
 import com.yangzhiwen.armour.compass.*
 import com.yangzhiwen.armour.ext.helper.parseClassName
-import java.io.Serializable
+import com.yangzhiwen.armour.ext.helper.wrapUrl
 
 /**
  * Created by yangzhiwen on 2017/8/12.
@@ -82,21 +79,26 @@ class ServiceComponentHandler : NavigatorComponentHandler(ComponentType.instance
 
 class ContentProviderComponentHandler : NavigatorComponentHandler(ComponentType.instance.Provider) {
     companion object {
-        val instance = ServiceComponentHandler()
+        val instance = ContentProviderComponentHandler()
     }
 
     override fun onHandle(component: NavigatorComponent, operation: ComponentOperation, jsonArg: String) {
         if (component !is ProviderComponent) return
         val context = Navigator.instance.context ?: return
+        println("On Provider Handle $component : $operation")
 
         if (component.isPlugin) {
-
+            when (operation) {
+                is InsertContentOperation -> operation.url = wrapUrl(component, operation.url)
+                is DeleteContentOperation -> operation.url = wrapUrl(component, operation.url)
+                is QueryContentOperation -> operation.url = wrapUrl(component, operation.url)
+            }
         }
 
         when (operation) {
             is InsertContentOperation -> context.contentResolver.insert(operation.url, operation.values)
             is DeleteContentOperation -> context.contentResolver.delete(operation.url, operation.where, operation.selectionArgs)
-            is QueryContentOperation -> operation.callback.onQuery(context.contentResolver.query(operation.url, operation.projection, operation.selection, operation.selectionArgs, operation.sortOrder))
+            is QueryContentOperation -> operation.callback(context.contentResolver.query(operation.url, operation.projection, operation.selection, operation.selectionArgs, operation.sortOrder))
         }
     }
 }

@@ -7,7 +7,6 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/armour/armour.iml" filepath="$PROJECT_DIR$/armour/armour.iml" />
       <module fileurl="file://$PROJECT_DIR$/armourplugin/armourplugin.iml" filepath="$PROJECT_DIR$/armourplugin/armourplugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/armourplugin/armourplugin.iml" filepath="$PROJECT_DIR$/armourplugin/armourplugin.iml" />
     </modules>
   </component>
 </project>

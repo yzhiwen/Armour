@@ -3,6 +3,8 @@ package com.yangzhiwen.armour
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
+import android.content.res.AssetManager
+import android.content.res.Resources
 import com.yangzhiwen.armour.ext.compass.Receiver
 import com.yangzhiwen.armour.ext.compass.ReceiverComponent
 import com.yangzhiwen.armour.compass.ComponentType
@@ -12,25 +14,44 @@ import dalvik.system.DexClassLoader
 /**
  * Created by yangzhiwen on 2017/8/13.
  */
-class APlugin(context: Context, name: String, path: String) {
-    val pluginPath = path
-    val DEX_OUT_PATH = context.getDir("aplugin", Context.MODE_PRIVATE).absolutePath
-    val classloader = DexClassLoader(path, DEX_OUT_PATH, null, context.classLoader)
+class APlugin(hostContext: Context, aPluginName: String, apkPath: String) {
+    val pluginPath = apkPath
+    val DEX_OUT_PATH = hostContext.getDir("aplugin", Context.MODE_PRIVATE).absolutePath
+    val aPluginClassloader = DexClassLoader(apkPath, DEX_OUT_PATH, null, hostContext.classLoader)
+
+    val aPluginAssetManager: AssetManager
+    val aPluginResources: Resources
 
     init {
-        val module = Navigator.instance.getModule(name)
+        val oldResources = hostContext.resources  //todo 可能为空
+        aPluginAssetManager = oldResources.assets.javaClass.newInstance()
+        val result = Hacker.on(aPluginAssetManager.javaClass)
+                .method("addAssetPath", String::class.java)
+                ?.invoke(aPluginAssetManager, apkPath) as Int
+        if (result == 0) {
+            println("addAssetPath return 0 on the plugin name: $aPluginName")
+            // todo throw
+        }
+
+        // hook ContextThemeWrapper 的 mResource
+        aPluginResources = Resources(aPluginAssetManager, oldResources.displayMetrics, oldResources.configuration)
+//        Hacker.on(activity.javaClass)
+//                .field("mResources")
+//                ?.set(activity, newR)
+
+        val module = Navigator.instance.getModule(aPluginName)
         // todo receiver context res
         // init plugin receiver
         module?.componentMap
                 ?.filter { it.value.type == ComponentType.instance.Receiver }
                 ?.forEach {
                     val component = it.value as ReceiverComponent
-                    val receiver = classloader.loadClass(component.realComponent).newInstance() as BroadcastReceiver
+                    val receiver = aPluginClassloader.loadClass(component.realComponent).newInstance() as BroadcastReceiver
                     val filter = IntentFilter()
                     for (action in component.actions) {
                         filter.addAction(action)
                     }
-                    context.registerReceiver(receiver, filter)
+                    hostContext.registerReceiver(receiver, filter)
                 }
     }
 }

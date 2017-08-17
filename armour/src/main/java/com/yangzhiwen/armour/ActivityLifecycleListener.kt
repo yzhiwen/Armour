@@ -7,6 +7,7 @@ import android.os.Bundle
 /**
  * Created by yangzhiwen on 17/8/15.
  */
+@Deprecated("delete")
 class ActivityLifecycleListener : Application.ActivityLifecycleCallbacks {
 
     companion object {

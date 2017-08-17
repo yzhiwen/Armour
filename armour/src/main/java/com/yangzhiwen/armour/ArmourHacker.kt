@@ -25,6 +25,7 @@ class ArmourHacker {
     }
 
 
+    @Deprecated("delete")
     fun hookActivityResource(activity: Activity) {
         // 根据 module 是否空 判断是否插件进行hook
         val module = Navigator.instance.getModuleByRealComponent(activity.javaClass.name) ?: return

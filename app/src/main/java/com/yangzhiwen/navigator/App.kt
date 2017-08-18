@@ -39,8 +39,8 @@ class App : Application() {
         Navigator.instance.registerProviderComponent(true, "user_center", "user_provider", "com.yangzhiwen.demo.UserContentProvider", Uri.parse("com.yangzhiwen.user"))
 
 //        Navigator.instance.registerActivityComponentHandler()
-        Navigator.instance.registerServiceComponentHandler()
-        Navigator.instance.registerProviderComponentHandler()
+//        Navigator.instance.registerServiceComponentHandler()
+//        Navigator.instance.registerProviderComponentHandler()
 
         thread {
             val outPath = copy()

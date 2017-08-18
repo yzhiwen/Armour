@@ -22,6 +22,7 @@ class APlugin(hostContext: Context, val aPluginName: String, apkPath: String) {
     val aPluginAssetManager: AssetManager
     val aPluginResources: Resources
     val aPluginContextMap = mutableMapOf<String, AContext>()
+    val aPluginContext = AContext(hostContext, this)
 
     init {
         val oldResources = hostContext.resources  //todo 可能为空
@@ -56,7 +57,7 @@ class APlugin(hostContext: Context, val aPluginName: String, apkPath: String) {
         var aPluginContext = aPluginContextMap[name]
         if (aPluginContext == null) {
             aPluginContext = AContext(base, this)
-            aPluginContextMap[name] = aPluginContext
+            aPluginContextMap.put(name, aPluginContext)
         }
         return aPluginContext
     }

@@ -5,19 +5,19 @@ import android.content.Context
 import android.content.Intent
 import com.yangzhiwen.armour.compass.Navigator
 import com.yangzhiwen.armour.ext.compass.ActivityComponent
+import com.yangzhiwen.armour.ext.compass.ServiceComponent
 import com.yangzhiwen.armour.proxy.ArmourActivity
+import com.yangzhiwen.armour.proxy.ArmourRemoteService
+import com.yangzhiwen.armour.proxy.ArmourService
 
 /**
  * Created by yangzhiwen on 17/8/18.
  */
 class ArmourHooker {
-    fun execStartActivity(who: Context, intent: Intent?): Intent? {
-        println("ArmourInstrumentation execStartActivity :: ${intent?.component?.className}")
-        val componentName = intent?.component?.className
-        if (componentName == null) {
-            println("ArmourInstrumentation execStartActivity componentName == null")
-            return intent
-        }
+    fun execStartActivity(who: Context, intent: Intent): Intent? {
+        println("ArmourInstrumentation execStartActivity :: ${intent.component.className}")
+        // todo component null
+        val componentName = intent.component.className
         val component = Navigator.instance.getComponentByRealComponent(componentName)
         println("ArmourInstrumentation execStartActivity :: module $component")
         if (component is ActivityComponent && component.isPlugin) {
@@ -49,7 +49,7 @@ class ArmourHooker {
         println("callActivityOnCreate == $activity")
 //        println("callActivityOnCreate == ${activity.intent}") // todo 获取的是代理的ComponentName
 //        activity.componentName // todo 获取的是代理的ComponentName
-        val componentName = activity.javaClass.name ?: return
+        val componentName = activity.javaClass.name
         println("callActivityOnCreate == $componentName")
         val module = Navigator.instance.getModuleByRealComponent(componentName) ?: return
         val aPlugin = Armour.instance()?.getPlugin(module) ?: return
@@ -68,5 +68,22 @@ class ArmourHooker {
         Hacker.on(activity.javaClass)
                 .field("mBase")
                 ?.set(activity, aPluginContext)
+    }
+
+    fun onServiceHook(context: Context, componentName: String, operation: String, connOperation: () -> Unit): Boolean {
+        val component = Navigator.instance.getComponentByRealComponent(componentName) as? ServiceComponent ?: return false
+        if (!component.isPlugin) return false
+
+        val intent: Intent
+        if (component.isRemote) intent = Intent(context, ArmourRemoteService::class.java)
+        else intent = Intent(context, ArmourService::class.java)
+
+        connOperation()
+        intent.putExtra(ArmourService.ARG_OP, operation)
+        intent.putExtra(ArmourService.MODULE_NAME, component.module)
+        intent.putExtra(ArmourService.COMPONENT, component.realComponent)
+
+        context.startService(intent)
+        return true
     }
 }

@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import com.yangzhiwen.armour.AContext
 import com.yangzhiwen.armour.Armour
 import com.yangzhiwen.armour.Hacker
 import com.yangzhiwen.armour.ext.helper.parseClassPackage
@@ -23,7 +24,6 @@ open class ArmourService : Service() {
         val STOP = "STOP"
         val BIND = "BIND"
         val UNBIND = "UNBIND"
-        val SERVICECONNECTION = "SERVICECONNECTION"
 
         private val armourConnMap = mutableMapOf<String, ServiceConnection>()
         fun getServiceConn(name: String) = armourConnMap[name]
@@ -49,24 +49,31 @@ open class ArmourService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         println(" == ArmourService onStartCommand ")
+        if (intent == null) return super.onStartCommand(intent, flags, startId)
 
-        val component = intent?.getStringExtra(COMPONENT) ?: return super.onStartCommand(intent, flags, startId)
+        val module = intent.getStringExtra(MODULE_NAME) ?: return super.onStartCommand(intent, flags, startId)
+        val component = intent.getStringExtra(COMPONENT) ?: return super.onStartCommand(intent, flags, startId)
+        val operation = intent.getStringExtra(ARG_OP)
         println(" == ArmourService onStartCommand $component")
 
         var service = map[component]
         if (service == null) {
-            val aPlugin = Armour.instance(this.application).getPlugin("user_center") ?: return super.onStartCommand(intent, flags, startId)
-            // todo try catch
-            // todo unbind stop 拦截
+            when (operation) {
+                STOP, UNBIND -> return super.onStartCommand(intent, flags, startId)
+            }
+
+            val aPlugin = Armour.instance(this.application).getPlugin(module) ?: return super.onStartCommand(intent, flags, startId)
             service = aPlugin.aPluginClassloader.loadClass(component).newInstance() as Service
+
+            // todo attach
             Hacker.on(service::class.java)
                     .method("attachBaseContext", Context::class.java)
-                    ?.invoke(service, this)
+                    ?.invoke(service, aPlugin.aPluginContext)
+
             service.onCreate()
             map[component] = service
         }
 
-        val operation = intent.getStringExtra(ARG_OP)
         when (operation) {
             START -> service.onStartCommand(intent, flags, startId)
             STOP -> {

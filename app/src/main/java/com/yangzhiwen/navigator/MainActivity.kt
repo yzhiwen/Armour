@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
 import android.widget.Button
+import com.yangzhiwen.armour.Armour
 import com.yangzhiwen.armour.compass.Navigator
 import com.yangzhiwen.armour.ext.compass.*
 import com.yangzhiwen.armour.proxy.ArmourActivity
@@ -27,19 +28,21 @@ class MainActivity : AppCompatActivity() {
 
         println(ArmourActivity::class.java)
         findViewById<Button>(R.id.btn).setOnClickListener {
-            Navigator.instance.startActivity("host", "other", "aaa")
+            startActivity(Intent(this, OtherActivity::class.java))
         }
 
         findViewById<Button>(R.id.main).setOnClickListener {
-            Navigator.instance.startActivity("user_center", "main", "arg")
+            val c = Armour.instance(application).getPlugin("user_center")?.aPluginClassloader?.loadClass("com.yangzhiwen.demo.MainActivity") ?: return@setOnClickListener
+            startActivity(Intent(this, c))
         }
 
         findViewById<Button>(R.id.user2).setOnClickListener {
-            Navigator.instance.startActivity("user_center", "center", "arg2")
+            val c = Armour.instance(application).getPlugin("user_center")?.aPluginClassloader?.loadClass("com.yangzhiwen.demo.CenterActivity") ?: return@setOnClickListener
+            startActivity(Intent(this, c))
         }
 
         findViewById<Button>(R.id.send).setOnClickListener {
-            Navigator.instance.sendBroadcast(Intent("user_center_msg"))
+            sendBroadcast(Intent("user_center_msg"))
         }
 
         findViewById<Button>(R.id.start_local_service).setOnClickListener {

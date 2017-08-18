@@ -8,13 +8,15 @@ import android.app.Application
  */
 class Armour(context: Application) {
     val application = context
+    val armourHooker = ArmourHooker()
+    val armourInstrumentation: ArmourInstrumentation?
+    val classLoaderInterceptor = ArmourClassLoaderInterceptor()
     val armourClassLoader = ArmourClassLoader(application.classLoader)
-    var classLoaderInterceptor = ArmourClassLoaderInterceptor()
 
     init {
         println("init armour")
         ArmourHacker.instance.hackClassLoader(context, armourClassLoader)
-        application.registerActivityLifecycleCallbacks(ActivityLifecycleListener.instance)
+        armourInstrumentation = ArmourHacker.instance.hackInstrumentation(this, application)
     }
 
     companion object {

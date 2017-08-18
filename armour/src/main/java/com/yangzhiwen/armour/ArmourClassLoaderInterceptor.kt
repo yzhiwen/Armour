@@ -19,7 +19,7 @@ class ArmourClassLoaderInterceptor {
         println("ArmourClassLoaderInterceptor || load class $name to component $component")
         println("**********************************************")
 
-        return Armour.instance()?.getPlugin(component.module)?.classloader?.loadClass(component.realComponent) ?: return null
+        return Armour.instance()?.getPlugin(component.module)?.aPluginClassloader?.loadClass(component.realComponent) ?: return null
     }
 
     fun addLoadInterceptor(name: String, component: NavigatorComponent) {

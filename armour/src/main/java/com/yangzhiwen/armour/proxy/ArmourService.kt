@@ -46,7 +46,7 @@ open class ArmourService : Service() {
         if (service == null) {
             val aPlugin = Armour.instance(this.application).getPlugin("user_center") ?: return super.onStartCommand(intent, flags, startId)
             // todo try catch
-            service = aPlugin.classloader.loadClass(component).newInstance() as Service
+            service = aPlugin.aPluginClassloader.loadClass(component).newInstance() as Service
             Hacker.on(service::class.java)
                     .method("attachBaseContext", Context::class.java)
                     ?.invoke(service, this)

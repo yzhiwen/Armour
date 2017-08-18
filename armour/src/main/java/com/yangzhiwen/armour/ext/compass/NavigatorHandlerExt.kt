@@ -33,7 +33,7 @@ class ActivityComponentHandler : NavigatorComponentHandler(ComponentType.instanc
             // todo component 匹配 占坑组件
             val proxy = "com.yangzhiwen.armour.proxy.ArmourActivity"
             Armour.instance()?.classLoaderInterceptor?.addLoadInterceptor(proxy, component)
-//             todo 占坑组件
+//             todo 占坑组件w
             context.startActivity(Intent(context, ArmourActivity::class.java)) // 隐式启动android library Activity 会报错：android.content.ActivityNotFoundException: Unable to find explicit activity class
             return
         } else {

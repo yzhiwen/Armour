@@ -10,12 +10,16 @@ class Navigator {
 
     var context: Context? = null
     val realComponentToModule = mutableMapOf<String, String>()
+    val readComponentToComponent = mutableMapOf<String, NavigatorComponent>()
 
     companion object {
         val instance = Navigator()
     }
 
     fun getModuleByRealComponent(realComponent: String): String? = realComponentToModule[realComponent]
+
+    fun getComponentByRealComponent(realComponent: String): NavigatorComponent? = readComponentToComponent[realComponent]
+
 
     fun getModule(module: String): NavigatorModule? = modules[module]
 
@@ -38,6 +42,7 @@ class Navigator {
     fun registerComponent(component: NavigatorComponent) {
         getModuleWithRegister(component.module).registerComponent(component)
         realComponentToModule[component.realComponent] = component.module
+        readComponentToComponent[component.realComponent] = component
     }
 
     fun registerComponentHandler(componentType: String, handler: NavigatorComponentHandler)

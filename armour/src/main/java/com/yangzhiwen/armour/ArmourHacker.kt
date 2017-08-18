@@ -2,6 +2,7 @@ package com.yangzhiwen.armour
 
 import android.app.Activity
 import android.app.Application
+import android.app.Instrumentation
 import android.content.res.Resources
 import com.yangzhiwen.armour.compass.Navigator
 
@@ -24,6 +25,27 @@ class ArmourHacker {
                 ?.set(packageInfo, classLoader)
     }
 
+    fun hackInstrumentation(armour: Armour, application: Application): ArmourInstrumentation? {
+        println("hackInstrumentation start")
+        val activityThread = Hacker.on(application.baseContext.javaClass)
+                .field("mMainThread")
+                ?.get(application.baseContext)
+        if (activityThread == null) {
+            println("hackInstrumentation error")
+            return null
+        }
+
+        val ins = Hacker.on(activityThread.javaClass)
+                .field("mInstrumentation")
+        if (ins == null) {
+            println("hackInstrumentation error")
+            return null
+        }
+        val base = ins.get(activityThread) as Instrumentation
+        val armourInstrumentation = ArmourInstrumentation(armour, base)
+        ins.set(activityThread, armourInstrumentation)
+        return armourInstrumentation
+    }
 
     @Deprecated("delete")
     fun hookActivityResource(activity: Activity) {

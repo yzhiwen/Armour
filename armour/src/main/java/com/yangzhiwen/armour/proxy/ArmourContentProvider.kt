@@ -61,7 +61,7 @@ class ArmourContentProvider : ContentProvider() {
 
         val armour = Armour.instance() ?: return null
         val realComponent = Navigator.instance.getModule(module)?.getComponent(name)?.realComponent ?: return null
-        val componentInstance = (armour.getPlugin(module)?.classloader?.loadClass(realComponent)?.newInstance() ?: return null) as? ContentProvider ?: return null
+        val componentInstance = (armour.getPlugin(module)?.aPluginClassloader?.loadClass(realComponent)?.newInstance() ?: return null) as? ContentProvider ?: return null
         // todo provider context resource
         map[name] = componentInstance // todo name 作为key可能存在问题
         return componentInstance

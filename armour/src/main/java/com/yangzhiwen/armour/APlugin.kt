@@ -14,13 +14,14 @@ import dalvik.system.DexClassLoader
 /**
  * Created by yangzhiwen on 2017/8/13.
  */
-class APlugin(hostContext: Context, aPluginName: String, apkPath: String) {
+class APlugin(hostContext: Context, val aPluginName: String, apkPath: String) {
     val pluginPath = apkPath
     val DEX_OUT_PATH = hostContext.getDir("aplugin", Context.MODE_PRIVATE).absolutePath
     val aPluginClassloader = DexClassLoader(apkPath, DEX_OUT_PATH, null, hostContext.classLoader)
 
     val aPluginAssetManager: AssetManager
     val aPluginResources: Resources
+    val aPluginContextMap = mutableMapOf<String, AContext>()
 
     init {
         val oldResources = hostContext.resources  //todo 可能为空
@@ -33,11 +34,7 @@ class APlugin(hostContext: Context, aPluginName: String, apkPath: String) {
             // todo throw
         }
 
-        // hook ContextThemeWrapper 的 mResource
         aPluginResources = Resources(aPluginAssetManager, oldResources.displayMetrics, oldResources.configuration)
-//        Hacker.on(activity.javaClass)
-//                .field("mResources")
-//                ?.set(activity, newR)
 
         val module = Navigator.instance.getModule(aPluginName)
         // todo receiver context res
@@ -53,5 +50,14 @@ class APlugin(hostContext: Context, aPluginName: String, apkPath: String) {
                     }
                     hostContext.registerReceiver(receiver, filter)
                 }
+    }
+
+    fun getAPluginContext(name: String, base: Context): AContext {
+        var aPluginContext = aPluginContextMap[name]
+        if (aPluginContext == null) {
+            aPluginContext = AContext(base, this)
+            aPluginContextMap[name] = aPluginContext
+        }
+        return aPluginContext
     }
 }

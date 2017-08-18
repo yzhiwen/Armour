@@ -24,6 +24,17 @@ open class ArmourService : Service() {
         val BIND = "BIND"
         val UNBIND = "UNBIND"
         val SERVICECONNECTION = "SERVICECONNECTION"
+
+        private val armourConnMap = mutableMapOf<String, ServiceConnection>()
+        fun getServiceConn(name: String) = armourConnMap[name]
+        fun putServiceConn(name: String, conn: ServiceConnection) = armourConnMap.put(name, conn)
+        fun removeServiceConn(name: String) = armourConnMap.remove(name)
+        fun getConnComponent(conn: ServiceConnection): String? {
+            for ((k, v) in armourConnMap.iterator()) {
+                if (v === conn) return k
+            }
+            return null
+        }
     }
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -46,6 +57,7 @@ open class ArmourService : Service() {
         if (service == null) {
             val aPlugin = Armour.instance(this.application).getPlugin("user_center") ?: return super.onStartCommand(intent, flags, startId)
             // todo try catch
+            // todo unbind stop 拦截
             service = aPlugin.aPluginClassloader.loadClass(component).newInstance() as Service
             Hacker.on(service::class.java)
                     .method("attachBaseContext", Context::class.java)
@@ -60,20 +72,19 @@ open class ArmourService : Service() {
             STOP -> {
                 // 这里不判断是否bind
                 service.onDestroy()
+                removeServiceConn(component)
                 map.remove(component)
             }
             BIND -> {
                 // todo 多次调用bindService()，只调用一次onBind()
                 val binder = service.onBind(intent)
-                val conn = intent.extras?.getSerializable(SERVICECONNECTION) ?: return super.onStartCommand(intent, flags, startId)
-                conn as ServiceConnection
+                val conn = getServiceConn(component) ?: return super.onStartCommand(intent, flags, startId)
                 val pn = parseClassPackage(component)
                 conn.onServiceConnected(ComponentName(pn, component), binder)
             }
             UNBIND -> {
-                val conn = intent.extras?.getSerializable(SERVICECONNECTION) ?: return super.onStartCommand(intent, flags, startId)
-                conn as ServiceConnection
-                service.unbindService(conn)
+                service.onUnbind(intent) // todo change real intent
+                removeServiceConn(component)
                 map.remove(component)
             }
         }

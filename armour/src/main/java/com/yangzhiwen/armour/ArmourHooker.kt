@@ -1,10 +1,8 @@
 package com.yangzhiwen.armour
 
 import android.app.Activity
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import com.yangzhiwen.armour.compass.Navigator
 import com.yangzhiwen.armour.ext.compass.ActivityComponent
 import com.yangzhiwen.armour.proxy.ArmourActivity
@@ -56,8 +54,19 @@ class ArmourHooker {
         val module = Navigator.instance.getModuleByRealComponent(componentName) ?: return
         val aPlugin = Armour.instance()?.getPlugin(module) ?: return
         println("callActivityOnCreate hook resources")
+        // hook ContextThemeWrapper 的 mResource
         Hacker.on(activity.javaClass)
                 .field("mResources")
                 ?.set(activity, aPlugin.aPluginResources)
+
+        // hook ContextWrapper mBase
+        val mBase = Hacker.on(activity.javaClass)
+                .field("mBase")
+                ?.get(activity) as Context
+
+        val aPluginContext = aPlugin.getAPluginContext(componentName, mBase)
+        Hacker.on(activity.javaClass)
+                .field("mBase")
+                ?.set(activity, aPluginContext)
     }
 }

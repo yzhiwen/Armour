@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/armour" />
             <option value="$PROJECT_DIR$/armourplugin" />
+            <option value="$PROJECT_DIR$/codehide" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

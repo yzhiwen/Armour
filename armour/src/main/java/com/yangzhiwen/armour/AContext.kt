@@ -52,7 +52,7 @@ class AContext(val hostContext: Context, val aPlugin: APlugin) : ContextWrapper(
         return super.getTheme()
     }
 
-    // startActivityForResult、startActivity入口分布在Activity ContextImpl Instrumentation
+    // startActivityForResult、startActivity入口分布在Activity ContextImpl InstrumentationApplicationContentResolverApplicationContentResolver
     // 以及以上都会调用 Instrumentation
 
 

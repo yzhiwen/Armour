@@ -55,6 +55,8 @@ class ArmourContentProvider : ContentProvider() {
         val name = uri.getQueryParameter(COMPONENT)
         val uri = uri.getQueryParameter(PLUGIN_URI)
 
+        if (module == null || name == null || uri == null) return null
+
         println("$module :: $name :: $uri")
 
         if (map[name] != null) return map[name]

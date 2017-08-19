@@ -3,6 +3,7 @@ package com.yangzhiwen.armour;
 import android.net.Uri;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
@@ -30,9 +31,9 @@ public class ArmourIContentProvider implements InvocationHandler {
                 index++;
                 if (obj != null && obj instanceof Uri) {
                     String str = obj.toString();
-                    if (str.equals("content://com.yangzhiwen.demo")) {
+                    if (str.equals("content://com.yangzhiwen.user")) {
                         System.out.println("== demo");
-                        arg = "content://com.yangzhiwen.armour";
+                        arg = "content://com.yangzhiwen.armour?/are you ok";
                         break;
                     } else {
                         System.out.println("!= demo");
@@ -41,7 +42,7 @@ public class ArmourIContentProvider implements InvocationHandler {
                     System.out.println("obj == null");
                 }
             }
-            if (index != -1) {
+            if (arg != null) {
                 objects[index] = Uri.parse(arg);
                 System.out.println("== index == " + index + " || " + arg);
             } else {
@@ -50,6 +51,10 @@ public class ArmourIContentProvider implements InvocationHandler {
             System.out.println(Arrays.toString(objects));
         }
 
-        return method.invoke(icp, objects);
+        try {
+            return method.invoke(icp, objects);
+        } catch (InvocationTargetException e){
+            throw e.getTargetException();
+        }
     }
 }

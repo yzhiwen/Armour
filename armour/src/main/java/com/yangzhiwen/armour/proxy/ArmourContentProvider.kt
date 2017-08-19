@@ -10,6 +10,7 @@ import com.yangzhiwen.armour.compass.Navigator
 class ArmourContentProvider : ContentProvider() {
 
     companion object {
+        val AUTHORITY = "com.yangzhiwen.armour"
         val URI = Uri.parse("content://com.yangzhiwen.armour")
         val PLUGIN_URI = "PLUGIN_URI"
         val MODULE = "MODULE"

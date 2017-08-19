@@ -52,7 +52,7 @@ public class ArmourInstrumentation extends Instrumentation {
 
     public ActivityResult execStartActivity(Context who, IBinder contextThread, IBinder token, Activity target,
                                             Intent intent, int requestCode, Bundle options) {
-        intent = armour.getArmourHooker().execStartActivity(who, intent);
+        intent = armour.getArmourHacker().execStartActivity(who, intent);
         return execBaseStartActivity(who, contextThread, token, target, intent, requestCode, options);
     }
 
@@ -67,21 +67,20 @@ public class ArmourInstrumentation extends Instrumentation {
                     .method("execStartActivity", parameterTypes)
                     .invoke(base, who, contextThread, token, target, intent, requestCode, options);
         } catch (Exception e) {
-//            e.printStackTrace();
             return null;
         }
     }
 
     @Override
     public Activity newActivity(ClassLoader cl, String className, Intent intent) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-        Activity activity = armour.getArmourHooker().newActivity(cl, className, intent);
+        Activity activity = armour.getArmourHacker().newActivity(className, intent);
         if (activity != null) return activity;
         return super.newActivity(cl, className, intent);
     }
 
     @Override
     public void callActivityOnCreate(Activity activity, Bundle icicle) {
-        armour.getArmourHooker().callActivityOnCreate(activity);
+        armour.getArmourHacker().callActivityOnCreate(activity);
         super.callActivityOnCreate(activity, icicle);
     }
 }

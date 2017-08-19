@@ -11,10 +11,10 @@ import com.yangzhiwen.armour.proxy.ArmourService
 /**
  * Created by yangzhiwen on 2017/8/17.
  */
-class AContext(val hostContext: Context, val aPlugin: APlugin) : ContextWrapper(hostContext) {
+class AContext(val hostContext: Context, val aPlugin: APlugin, val armour: Armour) : ContextWrapper(hostContext) {
 
     val armourContentResolver = ArmourContentResolver(this)
-    val armourHooker = Armour.instance()?.armourHooker
+    val armourHacker = armour.armourHacker
 
     override fun getApplicationContext(): Context {
         return super.getApplicationContext()
@@ -64,28 +64,28 @@ class AContext(val hostContext: Context, val aPlugin: APlugin) : ContextWrapper(
         // 是 -> 调用代理Service
         println("${aPlugin.aPluginName} startService $service")
         val componentName = service.component.className ?: return super.startService(service)
-        if (armourHooker != null && armourHooker.onServiceHook(hostContext, componentName, ArmourService.START, {})) return service.component
+        if (armourHacker.onServiceHook(hostContext, componentName, ArmourService.START, {})) return service.component
         return super.startService(service)
     }
 
     override fun bindService(service: Intent, conn: ServiceConnection, flags: Int): Boolean {
         println("${aPlugin.aPluginName} bindService $service")
         val componentName = service.component.className ?: return super.bindService(service, conn, flags)
-        if (armourHooker != null && armourHooker.onServiceHook(hostContext, componentName, ArmourService.BIND) { ArmourService.putServiceConn(componentName, conn) }) return true
+        if (armourHacker.onServiceHook(hostContext, componentName, ArmourService.BIND) { ArmourService.putServiceConn(componentName, conn) }) return true
         return super.bindService(service, conn, flags)
     }
 
     override fun unbindService(conn: ServiceConnection) {
         println("${aPlugin.aPluginName} unbindService")
         val componentName = ArmourService.getConnComponent(conn) ?: return
-        if (armourHooker != null && armourHooker.onServiceHook(hostContext, componentName, ArmourService.UNBIND) { ArmourService.putServiceConn(componentName, conn) }) return
+        if (armourHacker.onServiceHook(hostContext, componentName, ArmourService.UNBIND) { ArmourService.putServiceConn(componentName, conn) }) return
         else super.unbindService(conn)
     }
 
     override fun stopService(service: Intent): Boolean {
         println("${aPlugin.aPluginName} stopService")
         val componentName = service.component.className ?: return false
-        if (armourHooker != null && armourHooker.onServiceHook(hostContext, componentName, ArmourService.STOP, {})) return true
+        if (armourHacker.onServiceHook(hostContext, componentName, ArmourService.STOP, {})) return true
         else return super.stopService(service)
     }
 

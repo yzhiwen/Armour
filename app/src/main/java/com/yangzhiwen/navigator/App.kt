@@ -2,7 +2,6 @@ package com.yangzhiwen.navigator
 
 import android.app.Application
 import android.net.Uri
-import android.os.Build
 import com.yangzhiwen.armour.Armour
 import com.yangzhiwen.armour.compass.Navigator
 import com.yangzhiwen.armour.ext.compass.*

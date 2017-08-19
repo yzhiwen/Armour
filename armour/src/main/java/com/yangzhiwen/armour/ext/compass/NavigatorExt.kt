@@ -4,29 +4,34 @@ import android.net.Uri
 import com.yangzhiwen.armour.compass.ComponentType
 import com.yangzhiwen.armour.compass.Navigator
 import com.yangzhiwen.armour.compass.NavigatorComponent
+import com.yangzhiwen.armour.compass.NavigatorModule
 
 
 /**
  * Created by yangzhiwen on 2017/8/12.
  */
 // Component Extensions
-class ActivityComponent(val isPlugin: Boolean, module: String, component: String, realComponent: String) : NavigatorComponent(module, component, realComponent, ComponentType.instance.Activity)
+class ActivityComponent(module: String, component: String, realComponent: String, val isPlugin: Boolean)
+    : NavigatorComponent(module, component, realComponent, ComponentType.instance.Activity)
 
-class ServiceComponent(val isPlugin: Boolean, module: String, component: String, realComponent: String, val isRemote: Boolean) : NavigatorComponent(module, component, realComponent, ComponentType.instance.Service)
+class ServiceComponent(module: String, component: String, realComponent: String, val isRemote: Boolean, val isPlugin: Boolean)
+    : NavigatorComponent(module, component, realComponent, ComponentType.instance.Service)
 
-class ReceiverComponent(val isPlugin: Boolean, module: String, component: String, realComponent: String, val actions: Array<out String>) : NavigatorComponent(module, component, realComponent, ComponentType.instance.Receiver)
+class ReceiverComponent(module: String, component: String, realComponent: String, val actions: Array<out String>, val isPlugin: Boolean)
+    : NavigatorComponent(module, component, realComponent, ComponentType.instance.Receiver)
 
-class ProviderComponent(val isPlugin: Boolean, module: String, component: String, realComponent: String, var url: Uri) : NavigatorComponent(module, component, realComponent, ComponentType.instance.Provider)
+class ProviderComponent(module: String, component: String, realComponent: String, var url: Uri, val isPlugin: Boolean)
+    : NavigatorComponent(module, component, realComponent, ComponentType.instance.Provider)
 
 // Component Register Extensions
-fun Navigator.registerActivityComponent(isPlugin: Boolean, module: String, name: String, realComponent: String)
-        = registerComponent(ActivityComponent(isPlugin, module, name, realComponent))
+fun NavigatorModule.registerActivityComponent(name: String, realComponent: String)
+        = registerComponent(ActivityComponent(moduleName, name, realComponent, isPlugin))
 
-fun Navigator.registerServiceComponent(isPlugin: Boolean, module: String, name: String, realComponent: String, isRemote: Boolean)
-        = registerComponent(ServiceComponent(isPlugin, module, name, realComponent, isRemote))
+fun NavigatorModule.registerServiceComponent(name: String, realComponent: String, isRemote: Boolean = true)
+        = registerComponent(ServiceComponent(moduleName, name, realComponent, isRemote, isPlugin))
 
-fun Navigator.registerReceiverComponent(isPlugin: Boolean, module: String, name: String, realComponent: String, vararg actions: String)
-        = registerComponent(ReceiverComponent(isPlugin, module, name, realComponent, actions))
+fun NavigatorModule.registerReceiverComponent(name: String, realComponent: String, vararg actions: String)
+        = registerComponent(ReceiverComponent(moduleName, name, realComponent, actions, isPlugin))
 
-fun Navigator.registerProviderComponent(isPlugin: Boolean, module: String, name: String, realComponent: String, url: Uri)
-        = registerComponent(ProviderComponent(isPlugin, module, name, realComponent, url))
+fun NavigatorModule.registerProviderComponent(name: String, realComponent: String, url: Uri)
+        = registerComponent(ProviderComponent(moduleName, name, realComponent, url, isPlugin))

@@ -21,22 +21,29 @@ class App : Application() {
 
         Armour.instance(this)
 
-        Navigator.instance.context = this
+
         // todo 自动化 & 动态化
         // 宿主路由
-        Navigator.instance.registerActivityComponent(false, "host", "pay", "com.yangzhiwen.navigator.MainActivity")
-        Navigator.instance.registerActivityComponent(false, "host", "other", "com.yangzhiwen.navigator.OtherActivity")
+        Navigator.instance.register("host", false) {
+            registerActivityComponent("pay", "com.yangzhiwen.navigator.MainActivity")
+            registerActivityComponent("other", "com.yangzhiwen.navigator.OtherActivity")
+        }
+
 
         // 插件 路由
-        Navigator.instance.registerActivityComponent(true, "user_center", "main", "com.yangzhiwen.demo.MainActivity")
-        Navigator.instance.registerActivityComponent(true, "user_center", "center", "com.yangzhiwen.demo.CenterActivity")
-        Navigator.instance.registerServiceComponent(true, "user_center", "user_service", "com.yangzhiwen.demo.UserCenterService", false)
-        Navigator.instance.registerServiceComponent(true, "user_center", "user_service", "com.yangzhiwen.demo.UserRemoteService", true)
+        Navigator.instance.register("user_center", true) {
+            registerActivityComponent("main", "com.yangzhiwen.demo.MainActivity")
+            registerActivityComponent("center", "com.yangzhiwen.demo.CenterActivity")
 
-        val actions = arrayOf("user_center_msg", "user_center_setting_msg")
-        Navigator.instance.registerReceiverComponent(true, "user_center", "user_center_receiver", "com.yangzhiwen.demo.UserCenterReceiver", *actions)
+            registerServiceComponent("user_service", "com.yangzhiwen.demo.UserCenterService", false)
+            registerServiceComponent("user_remote_service", "com.yangzhiwen.demo.UserRemoteService")
 
-        Navigator.instance.registerProviderComponent(true, "user_center", "user_provider", "com.yangzhiwen.demo.UserContentProvider", Uri.parse("com.yangzhiwen.user"))
+            val actions = arrayOf("user_center_msg", "user_center_setting_msg")
+            registerReceiverComponent("user_center_receiver", "com.yangzhiwen.demo.UserCenterReceiver", *actions)
+
+            registerProviderComponent("user_provider", "com.yangzhiwen.demo.UserContentProvider", Uri.parse("com.yangzhiwen.user"))
+        }
+
 
         thread {
             val outPath = copy()

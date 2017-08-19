@@ -91,7 +91,6 @@ class AContext(val hostContext: Context, val aPlugin: APlugin, val armour: Armou
 
     // Content Resolver入口只有ContextImpl一个
     override fun getContentResolver(): ContentResolver {
-//        todo
         println("${aPlugin.aPluginName} getContentResolver")
         return armourContentResolver
     }

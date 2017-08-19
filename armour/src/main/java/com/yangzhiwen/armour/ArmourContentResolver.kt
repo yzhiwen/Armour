@@ -9,42 +9,43 @@ import com.yangzhiwen.armour.ext.compass.ProviderComponent
 /**
  * Created by yangzhiwen on 17/8/18.
  */
-class ArmourContentResolver(context: Context) : ContentResolver(context) {
+class ArmourContentResolver(context: Context, val armour: Armour) : ContentResolver(context) {
 
     // todo
     fun acquireProvider(c: Context, name: String): IContentProvider? {
         println("ArmourContentResolver acquireProvider $name")
+        // todo flat map
         Navigator.instance.readComponentToComponent.filter {
             it.value is ProviderComponent
         }.forEach {
             val component = it.value as ProviderComponent
-            if (component.url.toString() == name) {
+            if (component.url.toString() == name && component.isPlugin) {
                 println(component.realComponent)
+                return armour.armourIContentProvider as IContentProvider?
             }
-            if (component.isPlugin) return Armour.instance()?.armourIContentProvider as IContentProvider?
         }
 
-        val base = Armour.instance()?.application?.contentResolver ?: return null
+        val base = armour.application.contentResolver ?: return null
         val icp = Hacker.on(base.javaClass)
                 .method("acquireProvider", Context::class.java, String::class.java)
                 ?.invoke(base, c, name) as IContentProvider
         return icp
     }
 
-
     fun acquireUnstableProvider(context: Context, auth: String): IContentProvider? {
         println("ArmourContentResolver acquireUnstableProvider $auth")
+        // todo flat map
         Navigator.instance.readComponentToComponent.filter {
             it.value is ProviderComponent
         }.forEach {
             val component = it.value as ProviderComponent
-            if (component.url.toString() == auth) {
+            if (component.url.toString() == auth && component.isPlugin) {
                 println(component.realComponent)
+                return armour.armourIContentProvider as IContentProvider?
             }
-            if (component.isPlugin) return Armour.instance()?.armourIContentProvider as IContentProvider?
         }
 
-        val base = Armour.instance()?.application?.contentResolver ?: return null
+        val base = armour.application.contentResolver ?: return null
         val icp = Hacker.on(base.javaClass)
                 .method("acquireUnstableProvider", Context::class.java, String::class.java)
                 ?.invoke(base, context, auth) as IContentProvider

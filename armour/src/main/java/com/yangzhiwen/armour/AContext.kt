@@ -13,7 +13,7 @@ import com.yangzhiwen.armour.proxy.ArmourService
  */
 class AContext(val hostContext: Context, val aPlugin: APlugin, val armour: Armour) : ContextWrapper(hostContext) {
 
-    val armourContentResolver = ArmourContentResolver(this)
+    val armourContentResolver = ArmourContentResolver(this, armour)
     val armourHacker = armour.armourHacker
 
     override fun getApplicationContext(): Context {

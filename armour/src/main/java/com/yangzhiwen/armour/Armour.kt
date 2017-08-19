@@ -9,7 +9,7 @@ import android.app.Application
 class Armour(context: Application) {
     val application = context
     val armourHacker = ArmourHacker(application)
-    val armourInstrumentation: ArmourInstrumentation?
+    val armourInstrumentation: ArmourInstrumentation
     val armourIContentProvider: Any?
     val armourClassLoader = ArmourClassLoader(application.classLoader)
 

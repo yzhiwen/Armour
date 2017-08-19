@@ -1,7 +1,6 @@
 package com.yangzhiwen.armour.compass
 
 import android.content.Context
-import com.yangzhiwen.compass.center.ComponentHandlerCenter
 
 /**
  * Created by yangzhiwen on 2017/8/12.
@@ -43,21 +42,5 @@ class Navigator {
         getModuleWithRegister(component.module).registerComponent(component)
         realComponentToModule[component.realComponent] = component.module
         readComponentToComponent[component.realComponent] = component
-    }
-
-    @Deprecated("delete")
-    fun registerComponentHandler(componentType: String, handler: NavigatorComponentHandler)
-            = ComponentHandlerCenter.instance.registerComponentHandler(componentType, handler)
-
-    @Deprecated("delete")
-    fun registerInterceptor(interceptor: NavigatorInterceptor) {
-
-    }
-
-    @Deprecated("delete")
-    fun nav(module: String, name: String, operation: ComponentOperation, jsonArg: String = "") {
-        val cmp = getModule(module)?.getComponent(name) ?: return
-        val type = cmp.type
-        ComponentHandlerCenter.instance.getComponentHandler(type)?.onHandle(cmp, operation, jsonArg)
     }
 }

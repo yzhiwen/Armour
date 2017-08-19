@@ -7,6 +7,7 @@ import android.app.Instrumentation
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
+import android.net.Uri
 import com.yangzhiwen.armour.compass.Navigator
 import com.yangzhiwen.armour.ext.compass.ActivityComponent
 import com.yangzhiwen.armour.ext.compass.ServiceComponent
@@ -15,6 +16,7 @@ import com.yangzhiwen.armour.proxy.ArmourContentProvider
 import com.yangzhiwen.armour.proxy.ArmourRemoteService
 import com.yangzhiwen.armour.proxy.ArmourService
 import java.lang.reflect.Proxy
+import java.util.*
 
 /**
  * Created by yangzhiwen on 2017/8/13.
@@ -46,7 +48,7 @@ class ArmourHacker(val application: Application) {
                 .field("mClassLoader")!!.set(packageInfo, classLoader)
     }
 
-    fun hackInstrumentation(armour: Armour, application: Application): ArmourInstrumentation? {
+    fun hackInstrumentation(armour: Armour, application: Application): ArmourInstrumentation {
         println("hackInstrumentation start")
         val ins = Hacker.on(activityThread.javaClass).field("mInstrumentation")!!
 
@@ -75,9 +77,42 @@ class ArmourHacker(val application: Application) {
         }
 
         val cl = arrayOf(Class.forName("android.content.IContentProvider"))
-        val proxy = Proxy.newProxyInstance(application.classLoader, cl, ArmourIContentProvider(icp))
+        val proxy = Proxy.newProxyInstance(application.classLoader, cl, ArmourIContentProvider(icp, this))
 
         return proxy
+    }
+
+    fun onIContentProviderInvoke(params: Array<Any>?) {
+        if (params == null) return
+
+//        Navigator.instance.modules.filter {
+//
+//        }
+
+        var index = -1
+        var arg: String? = null
+        for (obj in params) {
+            index++
+            if (obj is Uri) {
+                val str = obj.toString()
+                // todo is plugin
+                if (str == "content://com.yangzhiwen.user") {
+                    println("== demo")
+                    arg = "content://com.yangzhiwen.armour?/are you ok"
+                    break
+                } else {
+                    println("!= demo")
+                }
+            } else {
+                println("obj == null")
+            }
+        }
+        if (arg != null) {
+            params[index] = Uri.parse(arg)
+            println("== index == $index || $arg")
+        } else {
+            println("== index == -1")
+        }
     }
 
 

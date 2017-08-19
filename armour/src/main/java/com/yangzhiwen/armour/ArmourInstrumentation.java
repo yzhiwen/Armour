@@ -1,16 +1,11 @@
 package com.yangzhiwen.armour;
 
 import android.app.Activity;
-import android.app.Application;
 import android.app.Instrumentation;
-import android.content.ContentProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.IBinder;
-
-import java.lang.reflect.Constructor;
 
 
 /**
@@ -18,29 +13,6 @@ import java.lang.reflect.Constructor;
  * Created by yangzhiwen on 17/8/18.
  */
 public class ArmourInstrumentation extends Instrumentation {
-
-    public static void tt() throws Exception {
-        String value = "android.app.ActivityThread$ProviderClientRecord";
-        System.out.println(String[].class);
-        Class<?> b = Class.forName("android.content.IContentProvider");
-        System.out.println(b);
-        Class<?> c = Class.forName("android.app.IActivityManager$ContentProviderHolder");
-        System.out.println(c);
-        System.out.println(ContentProvider.class);
-        Class<?> abc = Class.forName(value);
-        System.out.println(abc.getConstructors());
-        Constructor<?>[] constructors = abc.getDeclaredConstructors();
-        System.out.println(constructors.length);
-//        String[] sss = {""};
-        constructors[0].setAccessible(true);
-        // 五个参数因为是外部类是ActivityThread
-        Object o = constructors[0].newInstance(null, null, null, null, null);
-        System.out.println(o);
-        System.out.println(constructors[0]);
-//        System.out.println("====");
-//        abc.newInstance();
-//                .getConstructor(String[].class, b, ContentProvider.class, c);
-    }
 
     private Instrumentation base;
     private Armour armour;

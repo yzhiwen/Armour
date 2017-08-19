@@ -173,7 +173,6 @@ class ArmourHacker(val application: Application) {
                 .field("mResources")
                 ?.set(activity, newR)
 
-
         // hook mBase 的 mResource属性
 //        val mBaseField = findField(activity.javaClass, "mBase") ?: return
 //        mBaseField.isAccessible = true

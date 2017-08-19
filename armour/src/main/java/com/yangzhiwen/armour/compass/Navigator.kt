@@ -45,13 +45,16 @@ class Navigator {
         readComponentToComponent[component.realComponent] = component
     }
 
+    @Deprecated("delete")
     fun registerComponentHandler(componentType: String, handler: NavigatorComponentHandler)
             = ComponentHandlerCenter.instance.registerComponentHandler(componentType, handler)
 
+    @Deprecated("delete")
     fun registerInterceptor(interceptor: NavigatorInterceptor) {
 
     }
 
+    @Deprecated("delete")
     fun nav(module: String, name: String, operation: ComponentOperation, jsonArg: String = "") {
         val cmp = getModule(module)?.getComponent(name) ?: return
         val type = cmp.type

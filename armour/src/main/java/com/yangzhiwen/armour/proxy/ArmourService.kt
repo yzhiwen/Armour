@@ -46,15 +46,16 @@ open class ArmourService : Service() {
     }
 
     val map = mutableMapOf<String, Service>()
+    val bindedService = mutableSetOf<Service>()
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        println(" == ArmourService onStartCommand ")
+        println("ArmourService onStartCommand")
         if (intent == null) return super.onStartCommand(intent, flags, startId)
 
         val module = intent.getStringExtra(MODULE_NAME) ?: return super.onStartCommand(intent, flags, startId)
         val component = intent.getStringExtra(COMPONENT) ?: return super.onStartCommand(intent, flags, startId)
         val operation = intent.getStringExtra(ARG_OP)
-        println(" == ArmourService onStartCommand $component")
+        println("ArmourService onStartCommand $component")
 
         var service = map[component]
         if (service == null) {
@@ -65,7 +66,7 @@ open class ArmourService : Service() {
             val aPlugin = Armour.instance(this.application).getPlugin(module) ?: return super.onStartCommand(intent, flags, startId)
             service = aPlugin.aPluginClassloader.loadClass(component).newInstance() as Service
 
-            // todo attach
+            // todo attach context
             Hacker.on(service::class.java)
                     .method("attachBaseContext", Context::class.java)
                     ?.invoke(service, aPlugin.aPluginContext)
@@ -83,7 +84,9 @@ open class ArmourService : Service() {
                 map.remove(component)
             }
             BIND -> {
-                // todo 多次调用bindService()，只调用一次onBind()
+                if (bindedService.contains(service)) return super.onStartCommand(intent, flags, startId)
+                bindedService.add(service)
+
                 val binder = service.onBind(intent)
                 val conn = getServiceConn(component) ?: return super.onStartCommand(intent, flags, startId)
                 val pn = parseClassPackage(component)
@@ -91,6 +94,8 @@ open class ArmourService : Service() {
             }
             UNBIND -> {
                 service.onUnbind(intent) // todo change real intent
+
+                bindedService.remove(service)
                 removeServiceConn(component)
                 map.remove(component)
             }

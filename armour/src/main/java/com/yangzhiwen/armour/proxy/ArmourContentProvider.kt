@@ -56,17 +56,17 @@ class ArmourContentProvider : ContentProvider() {
         val name = uri.getQueryParameter(COMPONENT)
         val uri = uri.getQueryParameter(PLUGIN_URI)
 
+        println("getPluginProvider || $module :: $name :: $uri")
         if (module == null || name == null || uri == null) return null
 
-        println("$module :: $name :: $uri")
-
-        if (map[name] != null) return map[name]
+        val key = "$module-$name"
+        if (map[key] != null) return map[key]
 
         val armour = Armour.instance() ?: return null
         val realComponent = Navigator.instance.getModule(module)?.getComponent(name)?.realComponent ?: return null
         val componentInstance = (armour.getPlugin(module)?.aPluginClassloader?.loadClass(realComponent)?.newInstance() ?: return null) as? ContentProvider ?: return null
         // todo provider context resource
-        map[name] = componentInstance // todo name 作为key可能存在问题
+        map[key] = componentInstance
         return componentInstance
     }
 }

@@ -11,8 +11,6 @@ import android.os.Bundle
 import android.os.IBinder
 import android.widget.Button
 import com.yangzhiwen.armour.Armour
-import com.yangzhiwen.armour.compass.Navigator
-import com.yangzhiwen.armour.ext.compass.*
 import com.yangzhiwen.armour.proxy.ArmourActivity
 
 class MainActivity : AppCompatActivity() {
@@ -46,31 +44,31 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.start_local_service).setOnClickListener {
-            Navigator.instance.startService("user_center", "user_service", "user_service arg xixi")
+//            Navigator.instance.startService("user_center", "user_service", "user_service arg xixi")
         }
 
         findViewById<Button>(R.id.stop_local_service).setOnClickListener {
-            Navigator.instance.stopService("user_center", "user_service", "user_service arg xixi")
+//            Navigator.instance.stopService("user_center", "user_service", "user_service arg xixi")
         }
 
         findViewById<Button>(R.id.bind_local_service).setOnClickListener {
-            Navigator.instance.bindService("user_center", "user_service", SC(), "user_service arg xixi")
+//            Navigator.instance.bindService("user_center", "user_service", SC(), "user_service arg xixi")
         }
 
         findViewById<Button>(R.id.insert).setOnClickListener {
-            val cv = ContentValues()
-            Navigator.instance.insert("user_center", "user_provider", Uri.parse("com.yangzhiwen.user"), cv)
+//            val cv = ContentValues()
+//            Navigator.instance.insert("user_center", "user_provider", Uri.parse("com.yangzhiwen.user"), cv)
         }
 
         findViewById<Button>(R.id.delete).setOnClickListener {
-            Navigator.instance.delete("user_center", "user_provider", Uri.parse("com.yangzhiwen.user"), null, null)
+//            Navigator.instance.delete("user_center", "user_provider", Uri.parse("com.yangzhiwen.user"), null, null)
         }
 
         findViewById<Button>(R.id.query).setOnClickListener {
-            Navigator.instance.query("user_center", "user_provider", Uri.parse("com.yangzhiwen.user"), null, null, null, "") {
-                cursor ->
-                println(cursor)
-            }
+//            Navigator.instance.query("user_center", "user_provider", Uri.parse("com.yangzhiwen.user"), null, null, null, "") {
+//                cursor ->
+//                println(cursor)
+//            }
         }
     }
 

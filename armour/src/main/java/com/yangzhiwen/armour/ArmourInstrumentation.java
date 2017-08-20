@@ -54,7 +54,7 @@ public class ArmourInstrumentation extends Instrumentation {
 
     @Override
     public void callActivityOnCreate(Activity activity, Bundle icicle) {
-        armour.getArmourHacker().callActivityOnCreate(activity);
+        armour.getArmourHacker().hackActivityOnCreate(activity);
         super.callActivityOnCreate(activity, icicle);
     }
 }

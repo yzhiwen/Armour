@@ -49,7 +49,7 @@ class ArmourHacker(val application: Application) {
                 .field("mClassLoader")!!.set(packageInfo, classLoader)
     }
 
-    fun hackInstrumentation(armour: Armour, application: Application): ArmourInstrumentation {
+    fun hackInstrumentation(armour: Armour): ArmourInstrumentation {
         println("hackInstrumentation start")
         val ins = Hacker.on(activityThread.javaClass).field("mInstrumentation")!!
 
@@ -128,7 +128,7 @@ class ArmourHacker(val application: Application) {
         return null
     }
 
-    fun callActivityOnCreate(activity: Activity) {
+    fun hackActivityOnCreate(activity: Activity) {
 //        println("callActivityOnCreate == ${activity.intent}") // todo 获取的是代理的ComponentName
 //        activity.componentName // todo 获取的是代理的ComponentName
         val componentName = activity.javaClass.name

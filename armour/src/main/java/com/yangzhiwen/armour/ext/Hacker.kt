@@ -19,8 +19,14 @@ class Hacker private constructor(val cl: Class<*>) {
         return field
     }
 
-    fun method(name: String, vararg params: Class<*>): Method? {
+    fun declaredMethod(name: String, vararg params: Class<*>): Method? {
         val method = cl.getDeclaredMethod(name, *params)
+        method.isAccessible = true
+        return method
+    }
+
+    fun method(name: String, vararg params: Class<*>): Method? {
+        val method = cl.getMethod(name, *params) // getDeclaredMethod 有限，只能获取当前类、隐藏方法也获取不到
         method.isAccessible = true
         return method
     }

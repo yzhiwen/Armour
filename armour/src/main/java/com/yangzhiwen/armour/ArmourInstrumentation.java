@@ -38,7 +38,7 @@ public class ArmourInstrumentation extends Instrumentation {
         try {
             return (ActivityResult) Hacker.Companion
                     .on(Instrumentation.class)
-                    .method("execStartActivity", parameterTypes)
+                    .declaredMethod("execStartActivity", parameterTypes)
                     .invoke(base, who, contextThread, token, target, intent, requestCode, options);
         } catch (Exception e) {
             return null;

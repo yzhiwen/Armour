@@ -29,7 +29,7 @@ class APlugin(hostContext: Context, val aPluginName: String, apkPath: String, va
         val oldResources = hostContext.resources  //todo 可能为空
         aPluginAssetManager = oldResources.assets.javaClass.newInstance()
         val result = Hacker.on(aPluginAssetManager.javaClass)
-                .method("addAssetPath", String::class.java)!!.invoke(aPluginAssetManager, apkPath) as Int
+                .declaredMethod("addAssetPath", String::class.java)!!.invoke(aPluginAssetManager, apkPath) as Int
         if (result == 0) {
             println("addAssetPath return 0 on the plugin name: $aPluginName")
             // todo throw

@@ -63,7 +63,7 @@ class ArmourHacker(val application: Application) {
     fun hackContentProvider(application: Application): Any? {
         val base = application.contentResolver
         val icp = Hacker.on(base.javaClass)
-                .method("acquireProvider", Context::class.java, String::class.java)!!.invoke(base, application, ArmourContentProvider.AUTHORITY)
+                .declaredMethod("acquireProvider", Context::class.java, String::class.java)!!.invoke(base, application, ArmourContentProvider.AUTHORITY)
 
         val cl = arrayOf(Class.forName("android.content.IContentProvider"))
         val proxy = Proxy.newProxyInstance(application.classLoader, cl, ArmourIContentProvider(icp, this))

@@ -48,7 +48,7 @@ class ArmourContentResolver(context: Context, val armour: Armour) : ContentResol
 
         val base = armour.application.contentResolver ?: return null
         val icp = Hacker.on(base.javaClass)
-                .method(methodName, Context::class.java, String::class.java)
+                .declaredMethod(methodName, Context::class.java, String::class.java)
                 ?.invoke(base, context, auth)
         return icp as IContentProvider?
     }

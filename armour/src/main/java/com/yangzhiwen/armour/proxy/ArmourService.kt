@@ -1,5 +1,6 @@
 package com.yangzhiwen.armour.proxy
 
+import android.app.Application
 import android.app.Service
 import android.content.ComponentName
 import android.content.Context
@@ -14,6 +15,26 @@ import com.yangzhiwen.armour.ext.parseClassPackage
  * Created by yangzhiwen on 17/8/15.
  */
 open class ArmourService : Service() {
+
+    val mToken by lazy {
+        Hacker.on(Service::class.java)
+                .field("mToken")
+                ?.get(this)
+    }
+
+    val mActivityManager by lazy {
+        Hacker.on(Service::class.java)
+                .field("mActivityManager")
+                ?.get(this)
+    }
+
+    val mClassName by lazy {
+        Hacker.on(Service::class.java)
+                .field("mClassName")
+                ?.get(this)
+    }
+
+    val mThread by lazy { Armour.instance()!!.armourHacker.activityThread }
 
     companion object {
         val COMPONENT = "COMPONENT"
@@ -65,10 +86,16 @@ open class ArmourService : Service() {
             val aPlugin = Armour.instance(this.application).getPlugin(module) ?: return super.onStartCommand(intent, flags, startId)
             service = aPlugin.aPluginClassloader.loadClass(component).newInstance() as Service
 
-            // todo attach context
-            Hacker.on(service::class.java)
-                    .method("attachBaseContext", Context::class.java)
-                    ?.invoke(service, aPlugin.aPluginContext)
+            try {
+                Hacker.on(service::class.java)
+                        .method("attach", Context::class.java, Class.forName("android.app.ActivityThread"),
+                                String::class.java, IBinder::class.java,
+                                Application::class.java, Any::class.java) // Any::class.java == Objct
+                        ?.invoke(service, aPlugin.aPluginContext, mThread, mClassName, mToken, application, mActivityManager)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return super.onStartCommand(intent, flags, startId)
+            }
 
             service.onCreate()
             map[component] = service

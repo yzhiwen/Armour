@@ -1,13 +1,19 @@
 package com.yangzhiwen.armour.proxy
 
+import android.content.ComponentName
 import android.content.ContentProvider
 import android.content.ContentValues
+import android.content.pm.ProviderInfo
 import android.database.Cursor
 import android.net.Uri
 import com.yangzhiwen.armour.Armour
 import com.yangzhiwen.armour.compass.Navigator
 
 class ArmourContentProvider : ContentProvider() {
+
+    val acpInfo: ProviderInfo by lazy {
+        Armour.instance()!!.application.packageManager.getProviderInfo(ComponentName(context, this::class.java), 0)
+    }
 
     companion object {
         val AUTHORITY = "com.yangzhiwen.armour"
@@ -64,9 +70,11 @@ class ArmourContentProvider : ContentProvider() {
 
         val armour = Armour.instance() ?: return null
         val realComponent = Navigator.instance.getModule(module)?.getComponent(name)?.realComponent ?: return null
-        val componentInstance = (armour.getPlugin(module)?.aPluginClassloader?.loadClass(realComponent)?.newInstance() ?: return null) as? ContentProvider ?: return null
-        // todo provider context resource
-        map[key] = componentInstance
-        return componentInstance
+        val aPlugin = armour.getPlugin(module) ?: return null
+        val cp = aPlugin.aPluginClassloader.loadClass(realComponent)?.newInstance() as ContentProvider
+        //  provider context resource and call onCreate
+        cp.attachInfo(aPlugin.aPluginContext, acpInfo)
+        map[key] = cp
+        return cp
     }
 }

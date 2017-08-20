@@ -8,7 +8,7 @@ class Navigator {
 
     // module -> component list | yes
     // component -> module | yes
-    // realComponent -> component | no
+    // realComponent -> component | yes
     val modules = mutableMapOf<String, NavigatorModule>()
     val realComponentToModule = mutableMapOf<String, String>()
     val readComponentToComponent = mutableMapOf<String, NavigatorComponent>()

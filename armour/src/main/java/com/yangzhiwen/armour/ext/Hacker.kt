@@ -9,7 +9,7 @@ import java.lang.reflect.Method
 class Hacker private constructor(val cl: Class<*>) {
 
     companion object {
-        // todo 做缓存
+        // todo 缓存
         fun on(cl: Class<*>) = Hacker(cl)
     }
 

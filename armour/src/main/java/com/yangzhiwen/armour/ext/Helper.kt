@@ -8,7 +8,7 @@ import com.yangzhiwen.armour.compass.NavigatorComponent
  * Created by yangzhiwen on 17/8/16.
  */
 
-// todo 测试用例
+// todo unit test
 fun parseClassPackage(className: String): String {
     val index = className.lastIndexOf("")
     if (index == -1) return ""

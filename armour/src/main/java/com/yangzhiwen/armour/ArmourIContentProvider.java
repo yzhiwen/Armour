@@ -28,7 +28,12 @@ public class ArmourIContentProvider implements InvocationHandler {
 
         armourHacker.onIContentProviderInvoke(objects);
 
+        System.out.println("ArmourIContentProvider invoke " + method.getName() + Arrays.toString(objects));
 
-        return method.invoke(icp, objects);
+        try {
+            return method.invoke(icp, objects);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }

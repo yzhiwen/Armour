@@ -41,7 +41,8 @@ class App : Application() {
             val actions = arrayOf("user_center_msg", "user_center_setting_msg")
             registerReceiverComponent("user_center_receiver", "com.yangzhiwen.demo.UserCenterReceiver", *actions)
 
-            registerProviderComponent("user_provider", "com.yangzhiwen.demo.UserContentProvider", Uri.parse("com.yangzhiwen.user"))
+            registerProviderComponent("user_provider", "com.yangzhiwen.demo.UserContentProvider",
+                    Uri.parse("content:://com.yangzhiwen.user"))
         }
 
 

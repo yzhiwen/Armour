@@ -10,7 +10,9 @@ import android.content.res.Resources
 import android.net.Uri
 import com.yangzhiwen.armour.compass.Navigator
 import com.yangzhiwen.armour.ext.compass.ActivityComponent
+import com.yangzhiwen.armour.ext.compass.ProviderComponent
 import com.yangzhiwen.armour.ext.compass.ServiceComponent
+import com.yangzhiwen.armour.ext.helper.wrapUrl
 import com.yangzhiwen.armour.proxy.ArmourActivity
 import com.yangzhiwen.armour.proxy.ArmourContentProvider
 import com.yangzhiwen.armour.proxy.ArmourRemoteService
@@ -85,33 +87,26 @@ class ArmourHacker(val application: Application) {
     fun onIContentProviderInvoke(params: Array<Any>?) {
         if (params == null) return
 
-//        Navigator.instance.modules.filter {
-//
-//        }
+        val set = Navigator.instance.readComponentToComponent.values.filter {
+            it is ProviderComponent && it.isPlugin
+        }
+        println(" || $set")
 
         var index = -1
-        var arg: String? = null
         for (obj in params) {
             index++
             if (obj is Uri) {
-                val str = obj.toString()
-                // todo is plugin
-                if (str == "content://com.yangzhiwen.user") {
-                    println("== demo")
-                    arg = "content://com.yangzhiwen.armour?/are you ok"
-                    break
-                } else {
-                    println("!= demo")
+                val result = set.filter {
+                    it as ProviderComponent
+                    it.url == obj
                 }
-            } else {
-                println("obj == null")
+                println(" || $result")
+                if (!result.isEmpty()) {
+                    val component = result.first()
+                    params[index] = wrapUrl(component, obj)
+                    break
+                }
             }
-        }
-        if (arg != null) {
-            params[index] = Uri.parse(arg)
-            println("== index == $index || $arg")
-        } else {
-            println("== index == -1")
         }
     }
 

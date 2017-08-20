@@ -38,7 +38,7 @@ class APlugin(hostContext: Context, val aPluginName: String, apkPath: String, va
         aPluginResources = Resources(aPluginAssetManager, oldResources.displayMetrics, oldResources.configuration)
 
         val module = Navigator.instance.getModule(aPluginName)
-        // todo receiver context res
+        // receiver application context
         // init plugin receiver
         module?.componentMap
                 ?.filter { it.value.type == ComponentType.instance.Receiver }

@@ -22,3 +22,12 @@ fun wrapUrl(component: NavigatorComponent, url: Uri): Uri {
     val newUrl = "${ArmourContentProvider.URI}/?${ArmourContentProvider.MODULE}=${component.module}&${ArmourContentProvider.COMPONENT}=${component.name}&${ArmourContentProvider.PLUGIN_URI}=$oUrl"
     return Uri.parse(newUrl)
 }
+
+fun <T> T.aTry(method: () -> Unit, handler: (() -> Unit)?) {
+    try {
+        method()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        if (handler != null) handler()
+    }
+}

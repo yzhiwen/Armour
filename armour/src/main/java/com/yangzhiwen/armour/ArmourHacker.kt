@@ -9,16 +9,16 @@ import android.content.Intent
 import android.content.res.Resources
 import android.net.Uri
 import com.yangzhiwen.armour.compass.Navigator
+import com.yangzhiwen.armour.ext.Hacker
 import com.yangzhiwen.armour.ext.compass.ActivityComponent
 import com.yangzhiwen.armour.ext.compass.ProviderComponent
 import com.yangzhiwen.armour.ext.compass.ServiceComponent
-import com.yangzhiwen.armour.ext.helper.wrapUrl
+import com.yangzhiwen.armour.ext.wrapUrl
 import com.yangzhiwen.armour.proxy.ArmourActivity
 import com.yangzhiwen.armour.proxy.ArmourContentProvider
 import com.yangzhiwen.armour.proxy.ArmourRemoteService
 import com.yangzhiwen.armour.proxy.ArmourService
 import java.lang.reflect.Proxy
-import java.util.*
 
 /**
  * Created by yangzhiwen on 2017/8/13.

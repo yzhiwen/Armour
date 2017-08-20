@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import com.yangzhiwen.armour.ext.Hacker;
+
 
 /**
  * use java，because kotlin Instrumentation execStartActivity can not invoke by system

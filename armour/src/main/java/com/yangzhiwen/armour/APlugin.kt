@@ -9,6 +9,7 @@ import com.yangzhiwen.armour.ext.compass.Receiver
 import com.yangzhiwen.armour.ext.compass.ReceiverComponent
 import com.yangzhiwen.armour.compass.ComponentType
 import com.yangzhiwen.armour.compass.Navigator
+import com.yangzhiwen.armour.ext.Hacker
 import dalvik.system.DexClassLoader
 
 /**

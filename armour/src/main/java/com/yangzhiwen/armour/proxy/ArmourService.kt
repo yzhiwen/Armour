@@ -6,10 +6,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
-import com.yangzhiwen.armour.AContext
 import com.yangzhiwen.armour.Armour
-import com.yangzhiwen.armour.Hacker
-import com.yangzhiwen.armour.ext.helper.parseClassPackage
+import com.yangzhiwen.armour.ext.Hacker
+import com.yangzhiwen.armour.ext.parseClassPackage
 
 /**
  * Created by yangzhiwen on 17/8/15.

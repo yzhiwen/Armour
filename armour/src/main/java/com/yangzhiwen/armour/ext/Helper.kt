@@ -1,4 +1,4 @@
-package com.yangzhiwen.armour.ext.helper
+package com.yangzhiwen.armour.ext
 
 import android.net.Uri
 import com.yangzhiwen.armour.proxy.ArmourContentProvider
@@ -10,7 +10,7 @@ import com.yangzhiwen.armour.compass.NavigatorComponent
 
 // todo 测试用例
 fun parseClassPackage(className: String): String {
-    val index = className.lastIndexOf(".")
+    val index = className.lastIndexOf("")
     if (index == -1) return ""
     else return className.subSequence(0, index).toString()
 //  val name = className.subSequence(index, className.length).toString()

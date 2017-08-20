@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.IContentProvider
 import com.yangzhiwen.armour.compass.Navigator
+import com.yangzhiwen.armour.ext.Hacker
 import com.yangzhiwen.armour.ext.compass.ProviderComponent
 
 /**

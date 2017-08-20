@@ -30,11 +30,11 @@ public class ArmourIContentProvider implements InvocationHandler {
 
         System.out.println("ArmourIContentProvider invoke " + method.getName() + Arrays.toString(objects));
 
-        try {
-            return method.invoke(icp, objects);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
+//        try {
+        return method.invoke(icp, objects);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw e;
+//        }
     }
 }

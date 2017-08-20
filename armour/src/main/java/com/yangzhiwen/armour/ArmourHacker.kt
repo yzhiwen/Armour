@@ -6,7 +6,6 @@ import android.app.Application
 import android.app.Instrumentation
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.net.Uri
 import com.yangzhiwen.armour.compass.Navigator
 import com.yangzhiwen.armour.ext.Hacker
@@ -62,21 +61,9 @@ class ArmourHacker(val application: Application) {
 
 
     fun hackContentProvider(application: Application): Any? {
-        val mProviderMap = Hacker.on(activityThread.javaClass)
-                .field("mProviderMap")!!.get(activityThread) as Map<*, *>
-
-        var icp: Any? = null
-
-        for ((k, v) in mProviderMap) {
-            if (k == null || v == null) continue
-            val authority = Hacker.on(k.javaClass)
-                    .field("authority")!!.get(k) as String
-            if (authority == ArmourContentProvider.AUTHORITY) {
-                icp = Hacker.on(v.javaClass)
-                        .field("mProvider")!!.get(v)
-                break
-            }
-        }
+        val base = application.contentResolver
+        val icp = Hacker.on(base.javaClass)
+                .method("acquireProvider", Context::class.java, String::class.java)!!.invoke(base, application, ArmourContentProvider.AUTHORITY)
 
         val cl = arrayOf(Class.forName("android.content.IContentProvider"))
         val proxy = Proxy.newProxyInstance(application.classLoader, cl, ArmourIContentProvider(icp, this))
@@ -148,7 +135,7 @@ class ArmourHacker(val application: Application) {
         println("callActivityOnCreate || activity $activity || component name $componentName")
         val module = Navigator.instance.getModuleByRealComponent(componentName) ?: return
         val aPlugin = Armour.instance()?.getPlugin(module) ?: return
-        // hook ContextThemeWrapper 的 mResource
+//        hook ContextThemeWrapper 的 mResource
         Hacker.on(activity.javaClass)
                 .field("mResources")
                 ?.set(activity, aPlugin.aPluginResources)

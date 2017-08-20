@@ -42,7 +42,7 @@ class App : Application() {
             registerReceiverComponent("user_center_receiver", "com.yangzhiwen.demo.UserCenterReceiver", *actions)
 
             registerProviderComponent("user_provider", "com.yangzhiwen.demo.UserContentProvider",
-                    Uri.parse("content:://com.yangzhiwen.user"))
+                    Uri.parse("content://com.yangzhiwen.user"))
         }
 
 

@@ -33,6 +33,7 @@ public class ArmourIContentProvider implements InvocationHandler {
         try {
             return method.invoke(icp, objects);
         } catch (Exception e) {
+            e.printStackTrace();
             throw e;
         }
     }

@@ -24,8 +24,8 @@ class MainActivity : Activity() {
         findViewById<Button>(R.id.btn).setOnClickListener {
             // todo async
             thread {
-                val outPath = download()
-                Armour.instance()?.instantPlugin("user_center", outPath)
+                val pluginPath = download()
+                Armour.instance(application).instantPlugin("user_center", pluginPath)
             }
         }
 

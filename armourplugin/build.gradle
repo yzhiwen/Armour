@@ -13,18 +13,41 @@ repositories {
 }
 
 //group和version在后面使用自定义插件的时候会用到
-group='com.yangzhiwen.plugin'
-version='0.1.0'
+group = 'com.yangzhiwen.armour'
+version = '0.1.0'
 
+///*
+// 发布gradle plugin到本地Maven
 uploadArchives {
     repositories {
         mavenDeployer {
-            //提交到远程服务器：
-            // repository(url: "http://www.xxx.com/repos") {
-            //    authentication(userName: "admin", password: "admin")
-            // }
             //本地的Maven地址设置为D:/repos
-            repository(url: uri('/Users/yangzhiwen/Documents/armourplugin'))
+            repository(url: uri('/Users/yangzhiwen/Documents/arplugin'))
         }
     }
 }
+//*/
+
+/*
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'com.novoda:bintray-release:0.5.0'
+    }
+}
+
+apply plugin: 'com.novoda.bintray-release'//添加
+
+//添加
+publish {
+    userOrg = 'yzhiwen'//bintray.com用户名
+    groupId = 'com.yangzhiwen'//jcenter上的路径
+    artifactId = 'armour'//项目名称
+    publishVersion = '0.1.0'//版本号
+    desc = 'armour framework gradle plugin for parse component'//描述
+    website = 'https://github.com/YZHIWEN/Armour/tree/master/armourplugin' // 网站，可为空
+}
+*/

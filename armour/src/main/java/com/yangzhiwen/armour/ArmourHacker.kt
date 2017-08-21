@@ -41,14 +41,6 @@ class ArmourHacker(val application: Application) {
         }
     }
 
-    fun hackClassLoader(context: Application, classLoader: ArmourClassLoader) {
-        val packageInfo = Hacker.on(context.baseContext.javaClass)
-                .field("mPackageInfo")!!.get(context.baseContext)
-
-        Hacker.on(packageInfo.javaClass)
-                .field("mClassLoader")!!.set(packageInfo, classLoader)
-    }
-
     fun hackInstrumentation(armour: Armour): ArmourInstrumentation {
         println("hackInstrumentation start")
         val ins = Hacker.on(activityThread.javaClass).field("mInstrumentation")!!

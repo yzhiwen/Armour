@@ -12,11 +12,11 @@ apply plugin: 'com.yangzhiwen.armourplugin'
 - 插件安装
 ```kotlin
 val pluginPath = download()
-Armour.instance(application).instantPlugin("user_center", pluginPath)
+Armour.instance(application).instantPlugin(pluginName, pluginPath)
 ```
 - 插件启动
 ```kotlin
-Armour.instance(application).getPlugin("user_center")?.start()
+Armour.instance(application).getPlugin(pluginName)?.start()
 ```
 
 # Article

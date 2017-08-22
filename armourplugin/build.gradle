@@ -28,13 +28,13 @@ uploadArchives {
 }
 //*/
 
-/*
+///*
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
+//        classpath 'com.android.tools.build:gradle:2.3.2'
         classpath 'com.novoda:bintray-release:0.5.0'
     }
 }
@@ -50,4 +50,4 @@ publish {
     desc = 'armour framework gradle plugin for parse component'//描述
     website = 'https://github.com/YZHIWEN/Armour/tree/master/armourplugin' // 网站，可为空
 }
-*/
+//*/

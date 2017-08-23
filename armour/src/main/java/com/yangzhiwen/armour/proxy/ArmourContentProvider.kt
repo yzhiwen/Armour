@@ -35,27 +35,32 @@ class ArmourContentProvider : ContentProvider() {
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
         println("ArmourContentProvider delete $uri")
-        return getPluginProvider(uri)?.delete(uri, selection, selectionArgs) ?: return 0
+        return getPluginProvider(uri)?.delete(getPluginUri(uri), selection, selectionArgs) ?: return 0
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
         println("ArmourContentProvider insert $uri")
-        return getPluginProvider(uri)?.insert(uri, values) ?: return null
+        return getPluginProvider(uri)?.insert(getPluginUri(uri), values) ?: return null
     }
 
     override fun query(uri: Uri, projection: Array<String>?, selection: String?,
                        selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
         println("ArmourContentProvider query $uri")
-        return getPluginProvider(uri)?.query(uri, projection, selection, selectionArgs, sortOrder)
+        return getPluginProvider(uri)?.query(getPluginUri(uri), projection, selection, selectionArgs, sortOrder)
     }
 
     override fun update(uri: Uri, values: ContentValues?, selection: String?,
                         selectionArgs: Array<String>?): Int {
         println("ArmourContentProvider update $uri")
-        return getPluginProvider(uri)?.update(uri, values, selection, selectionArgs) ?: return 0
+        return getPluginProvider(uri)?.update(getPluginUri(uri), values, selection, selectionArgs) ?: return 0
     }
 
     val map = mutableMapOf<String, ContentProvider>()
+
+    fun getPluginUri(uri: Uri): Uri {
+        val pluginUri = uri.getQueryParameter(PLUGIN_URI)
+        return Uri.parse(pluginUri)
+    }
 
     fun getPluginProvider(uri: Uri): ContentProvider? {
         val module = uri.getQueryParameter(MODULE)

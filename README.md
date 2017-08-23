@@ -4,6 +4,11 @@
 - 插件的开发同app开发
 - 只需要依赖armour gradle plugin即可，armour gradle plugin会在assets生成ArmourConfig.json组件信息用于宿主加载
 ```
+dependencies {
+    classpath 'com.yangzhiwen.armour:armourplugin:0.1.0'
+}
+
+
 apply plugin: 'com.yangzhiwen.armourplugin'
 ```
 

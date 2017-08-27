@@ -53,7 +53,7 @@ class ArmourContentResolver(context: Context, val armour: Armour) : ContentResol
         return icp as IContentProvider?
     }
 
-    fun releaseProvider(provider: IContentProvider) = true
+    fun releaseProvider(icp: IContentProvider) = true
 
     fun releaseUnstableProvider(icp: IContentProvider) = true
 

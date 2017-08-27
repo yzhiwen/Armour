@@ -119,7 +119,7 @@ open class ArmourService : Service() {
                 conn.onServiceConnected(ComponentName(pn, component), binder)
             }
             UNBIND -> {
-                service.onUnbind(intent) // todo change real intent
+                service.onUnbind(intent) // todo real intent
 
                 bindedService.remove(service)
                 removeServiceConn(component)

@@ -57,9 +57,7 @@ class AContext(val hostContext: Context, val aPlugin: APlugin, val armour: Armou
 
 
     // Service相关入口只有ContextImpl一个
-    // todo review | try catch | 启动宿主Service
     override fun startService(service: Intent): ComponentName {
-        // todo wrap intent
         // target 是否插件Activity （没注册）
         // 是 -> 调用代理Service
         println("${aPlugin.aPluginName} startService $service")

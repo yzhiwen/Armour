@@ -11,11 +11,9 @@ class Armour(context: Application) {
     val armourIContentProvider: Any?
     val armourHacker = ArmourHacker(application)
     val armourInstrumentation: ArmourInstrumentation
-//    val armourClassLoader = ArmourClassLoader(application.classLoader)
 
     init {
         println("init armour")
-//        armourHacker.hackClassLoader(context, armourClassLoader)
         armourIContentProvider = armourHacker.hackContentProvider(application)
         armourInstrumentation = armourHacker.hackInstrumentation(this)
     }

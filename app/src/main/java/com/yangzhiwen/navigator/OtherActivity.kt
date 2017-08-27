@@ -1,11 +1,11 @@
 package com.yangzhiwen.navigator
 
+import android.app.Activity
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 
-class OtherActivity : AppCompatActivity() {
+class OtherActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
